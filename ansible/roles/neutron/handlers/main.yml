@@ -17,6 +17,7 @@
     image: "{{ service.image }}"
     volumes: "{{ service.volumes }}"
     privileged: "{{ service.privileged | default(False) }}"
+    environment: "{{ service.environment }}"
   when:
     - action != "config"
     - service.enabled | bool
