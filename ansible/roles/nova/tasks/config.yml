@@ -138,6 +138,21 @@
   notify:
     - Restart nova-compute container
 
+- name: Copying over rootwrap.conf for nova-compute
+  become: true
+  vars:
+    service: "{{ nova_services['nova-compute'] }}"
+  copy:
+    src: "{{ role_path }}/templates/rootwrap.conf"
+    dest: "{{ node_config_directory }}/nova-compute/rootwrap.conf"
+    mode: "0640"
+  register: compute_rootwrap_conf
+  when:
+    - inventory_hostname in groups[service.group]
+    - service.enabled | bool
+  notify:
+    - Restart nova-compute container
+
 - name: Check if policies shall be overwritten
   local_action: stat path="{{ node_custom_config }}/nova/policy.json"
   run_once: True
@@ -169,23 +184,6 @@
   with_dict: "{{ nova_services }}"
   notify:
     - "Restart {{ item.key }} container"
-
-- name: Copying over rootwrap.conf for nova-compute
-  become: true
-  vars:
-    service_name: "nova-compute"
-  merge_configs:
-    sources:
-      - "{{ role_path }}/templates/rootwrap.conf.j2"
-    dest: "{{ node_config_directory }}/nova-compute/rootwrap.conf"
-    mode: "0640"
-  register: compute_rootwrap_confs
-  when:
-    - inventory_hostname in groups[nova_services['nova-compute'].group]
-    - item.value.enabled | bool
-    - item.key in services_require_nova_conf
-  notify:
-    - "Restart nova-compute container"
 
 # check whether the containers parameter is changed. If yes, trigger the handler
 - name: Check nova containers
