@@ -265,6 +265,7 @@
       or nova_conf.changed | bool
       or policy_json.changed | bool
       or vcenter_ca_file | bool
+      or compute_rootwrap_confs | bool
       or nova_compute_container.changed | bool
 
 - name: Restart nova-compute-ironic container
