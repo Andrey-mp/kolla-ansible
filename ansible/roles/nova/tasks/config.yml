@@ -170,6 +170,28 @@
   notify:
     - "Restart {{ item.key }} container"
 
+- name: Copying over rootwrap.conf for nova-compute
+  become: true
+  vars:
+    services_require_nova_conf:
+      - nova-compute
+      - nova-compute-ironic
+    service_name: "{{ item.key }}"
+  merge_configs:
+    sources:
+      - "{{ role_path }}/templates/rootwrap.conf.j2"
+    dest: "{{ node_config_directory }}/{{ item.key }}/rootwrap.conf"
+    mode: "0640"
+  register: compute_rootwrap_confs
+  when:
+    - inventory_hostname in groups[item.value.group]
+    - item.value.enabled | bool
+    - item.key in services_require_nova_conf
+  with_items:
+    - "nova-compute"
+  notify:
+    - "Restart {{ item.key }} container"
+
 # check whether the containers parameter is changed. If yes, trigger the handler
 - name: Check nova containers
   become: true
