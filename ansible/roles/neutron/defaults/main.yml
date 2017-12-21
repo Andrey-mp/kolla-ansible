@@ -334,6 +334,6 @@ neutron_notification_drivers: "{{ notification_drivers|selectattr('enabled', 'eq
 ####################
 # OpenContrail
 ####################
-neutron_opencontrail_init_image: "contrail-openstack-neutron-contrail-backend"
+neutron_opencontrail_init_image: "contrail-openstack-neutron-init"
 neutron_opencontrail_init_tag: "{{ opencontrail_release }}"
 neutron_opencontrail_init_image_full: "{{ neutron_opencontrail_init_image }}:{{ neutron_opencontrail_init_tag }}"
