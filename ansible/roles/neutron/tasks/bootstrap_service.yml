@@ -86,6 +86,8 @@
   delegate_to: "{{ groups[neutron_server.group][0] }}"
 
 - name: Running Neutron opencontrail bootstrap container
+  vars:
+    neutron_server: "{{ neutron_services['neutron-server'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"

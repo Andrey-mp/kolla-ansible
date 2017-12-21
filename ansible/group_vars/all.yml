@@ -441,7 +441,7 @@ enable_neutron_sfc: "no"
 enable_nova_serialconsole_proxy: "no"
 enable_octavia: "no"
 enable_opendaylight: "no"
-enable_openvswitch: "{{ neutron_plugin_agent not in ['linuxbridge', 'opencontrail'] | bool }}"
+enable_openvswitch: "{{ neutron_plugin_agent != 'linuxbridge' | bool and neutron_plugin_agent != 'opencontrail' | bool }}"
 enable_ovs_dpdk: "no"
 enable_osprofiler: "no"
 enable_panko: "no"
@@ -714,7 +714,7 @@ opendaylight_allowed_network_types: '"flat", "vlan", "vxlan"'
 # OpenContrail
 ######################
 opencontrail_release: "4.1.0.0-6-{{ openstack_release }}"
-opencontrail_api_server_ip: {{ api_interface_address }}
+opencontrail_api_server_ip: "{{ api_interface_address }}"
 opencontrail_api_server_port: "8082"
 
 #######################################

@@ -127,7 +127,7 @@ neutron_services:
     container_name: "neutron_vpnaas_agent"
     image: "{{ neutron_vpnaas_agent_image_full }}"
     privileged: True
-    enabled: "{{ enable_neutron_vpnaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs', 'opencontrail] }}"
+    enabled: "{{ enable_neutron_vpnaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs', 'opencontrail'] }}"
     group: "neutron-vpnaas-agent"
     host_in_groups: "{{ inventory_hostname in groups['neutron-vpnaas-agent'] }}"
     volumes:

@@ -49,7 +49,7 @@
             "source": "{{ container_config_directory }}/ContrailPlugin.ini",
             "dest": "/etc/neutron/plugins/opencontrail/ContrailPlugin.ini",
             "owner": "neutron",
-            "optional": {{ (neutron_plugin_agent not in ['opencontrail']) | string | lower }},
+            "optional": {{ neutron_plugin_agent != 'opencontrail' | string | lower }},
             "perm": "0600"
         }{% endif %}
     ],

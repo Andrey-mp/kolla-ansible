@@ -19,6 +19,8 @@
   delegate_to: "{{ groups[nova_api.group][0] }}"
 
 - name: Running Nova opencontrail bootstrap container
+  vars:
+    nova_compute: "{{ nova_services['compute'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
@@ -33,4 +35,4 @@
     - neutron_plugin_agent == 'opencontrail'
     - inventory_hostname in groups['compute']
   run_once: True
-  delegate_to: "{{ groups[compute.group][0] }}"
+  delegate_to: "{{ groups['compute'][0] }}"
