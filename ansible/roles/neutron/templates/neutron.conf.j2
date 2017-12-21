@@ -28,6 +28,8 @@ metadata_proxy_socket = /var/lib/neutron/kolla/metadata_proxy
 interface_driver = openvswitch
 {% elif neutron_plugin_agent == "linuxbridge" %}
 interface_driver = linuxbridge
+{% elif neutron_plugin_agent == 'opencontrail' %}
+interface_driver =
 {% endif %}
 
 {% if enable_nova_fake | bool %}
@@ -41,6 +43,10 @@ allow_overlapping_ips = true
 core_plugin = vmware_nsx.plugin.NsxVPlugin
 {% elif neutron_plugin_agent == 'vmware_dvs' %}
 core_plugin = vmware_nsx.plugin.NsxDvsPlugin
+{% elif neutron_plugin_agent == 'opencontrail' %}
+core_plugin = neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2
+service_plugins = neutron_plugin_contrail.plugins.opencontrail.loadbalancer.v2.plugin.LoadBalancerPluginV2
+api_extensions_path = /opt/plugin/site-packages/neutron_plugin_contrail/extensions:/opt/plugin/site-packages/neutron_lbaas/extensions
 {% else %}
 core_plugin = ml2
 service_plugins = {{ neutron_service_plugins|map(attribute='name')|join(',') }}
@@ -170,3 +176,8 @@ os_interface = internal
 
 [privsep]
 helper_command=sudo neutron-rootwrap /etc/neutron/rootwrap.conf privsep-helper
+
+{% if neutron_plugin_agent == 'opencontrail' %}
+[quotas]
+quota_driver = neutron_plugin_contrail.plugins.opencontrail.quota.driver.QuotaDriver
+{% endif %}
