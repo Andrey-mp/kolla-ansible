@@ -384,7 +384,7 @@
     image: "{{ item.value.image }}"
     privileged: "{{ item.value.privileged | default(False) }}"
     volumes: "{{ item.value.volumes }}"
-    environment: "{{ item.value.get('environment') }}"
+    environment: "{{ item.value.get('environment', dict()) }}"
   register: check_neutron_containers
   when:
     - action != "config"
