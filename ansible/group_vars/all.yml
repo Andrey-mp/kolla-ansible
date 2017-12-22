@@ -158,7 +158,7 @@ bifrost_network_interface: "{{ network_interface }}"
 dns_interface: "{{ network_interface }}"
 tunnel_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + tunnel_interface]['ipv4']['address'] }}"
 
-# Valid options are [ openvswitch, linuxbridge, vmware_nsxv, vmware_dvs, opendaylight, opencontrail ]
+# Valid options are [ openvswitch, linuxbridge, vmware_nsxv, vmware_dvs, opendaylight ]
 neutron_plugin_agent: "openvswitch"
 
 # The default ports used by each service.
@@ -441,7 +441,7 @@ enable_neutron_sfc: "no"
 enable_nova_serialconsole_proxy: "no"
 enable_octavia: "no"
 enable_opendaylight: "no"
-enable_openvswitch: "{{ neutron_plugin_agent != 'linuxbridge' | bool and neutron_plugin_agent != 'opencontrail' | bool }}"
+enable_openvswitch: "{{ neutron_plugin_agent != 'linuxbridge' | bool }}"
 enable_ovs_dpdk: "no"
 enable_osprofiler: "no"
 enable_panko: "no"
@@ -709,13 +709,6 @@ enable_opendaylight_legacy_netvirt_conntrack: "no"
 opendaylight_port_binding_type: "pseudo-agentdb-binding"
 opendaylight_features: "odl-mdsal-apidocs,odl-netvirt-openstack"
 opendaylight_allowed_network_types: '"flat", "vlan", "vxlan"'
-
-######################
-# OpenContrail
-######################
-opencontrail_release: "4.1.0.0-6-{{ openstack_release }}"
-opencontrail_api_server_ip: "{{ api_interface_address }}"
-opencontrail_api_server_port: "8082"
 
 #######################################
 # XenAPI - Support XenAPI for XenServer
