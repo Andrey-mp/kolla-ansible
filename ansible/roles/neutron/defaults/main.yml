@@ -71,7 +71,7 @@ neutron_services:
     container_name: "neutron_dhcp_agent"
     image: "{{ neutron_dhcp_agent_image_full }}"
     privileged: True
-    enabled: "{{ neutron_plugin_agent not in ['vmware_nsxv', 'opencontrail'] }}"
+    enabled: "{{ neutron_plugin_agent != 'vmware_nsxv' }}"
     group: "neutron-dhcp-agent"
     host_in_groups: "{{ inventory_hostname in groups['neutron-dhcp-agent'] }}"
     volumes:
@@ -84,7 +84,7 @@ neutron_services:
     container_name: "neutron_l3_agent"
     image: "{{ neutron_l3_agent_image_full }}"
     privileged: True
-    enabled: "{{ not enable_neutron_vpnaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs', 'opencontrail'] and not enable_opendaylight_l3 | bool }}"
+    enabled: "{{ not enable_neutron_vpnaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs'] and not enable_opendaylight_l3 | bool }}"
     host_in_groups: >-
       {{
       inventory_hostname in groups['neutron-l3-agent']
@@ -101,7 +101,7 @@ neutron_services:
     container_name: "neutron_lbaas_agent"
     image: "{{ neutron_lbaas_agent_image_full }}"
     privileged: True
-    enabled: "{{ enable_neutron_lbaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs', 'opencontrail'] }}"
+    enabled: "{{ enable_neutron_lbaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs'] }}"
     group: "neutron-lbaas-agent"
     host_in_groups: "{{ inventory_hostname in groups['neutron-lbaas-agent'] }}"
     volumes:
@@ -113,7 +113,7 @@ neutron_services:
     container_name: "neutron_metadata_agent"
     image: "{{ neutron_metadata_agent_image_full }}"
     privileged: True
-    enabled: "{{ neutron_plugin_agent not in ['vmware_nsxv', 'opencontrail'] }}"
+    enabled: "{{ neutron_plugin_agent != 'vmware_nsxv' }}"
     host_in_groups: >-
       {{
       inventory_hostname in groups['neutron-metadata-agent']
@@ -129,7 +129,7 @@ neutron_services:
     container_name: "neutron_vpnaas_agent"
     image: "{{ neutron_vpnaas_agent_image_full }}"
     privileged: True
-    enabled: "{{ enable_neutron_vpnaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs', 'opencontrail'] }}"
+    enabled: "{{ enable_neutron_vpnaas | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs'] }}"
     group: "neutron-vpnaas-agent"
     host_in_groups: "{{ inventory_hostname in groups['neutron-vpnaas-agent'] }}"
     volumes:
@@ -142,7 +142,7 @@ neutron_services:
     container_name: "neutron_bgp_dragent"
     image: "{{ neutron_bgp_dragent_image_full }}"
     privileged: True
-    enabled: "{{ enable_neutron_bgp_dragent | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs', 'opencontrail'] }}"
+    enabled: "{{ enable_neutron_bgp_dragent | bool and neutron_plugin_agent not in ['vmware_nsxv', 'vmware_dvs'] }}"
     group: "neutron-bgp-dragent"
     host_in_groups: "{{ inventory_hostname in groups['neutron-bgp-dragent'] }}"
     volumes:
