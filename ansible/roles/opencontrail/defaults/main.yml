@@ -7,10 +7,7 @@ opencontrail_services:
     image: "{{ opencontrail_agent_vrouter_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: >-
-      {{
-      inventory_hostname in groups['compute']
-      }}
+    host_in_groups: {{ inventory_hostname in groups['compute'] }}
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "kolla_logs:/var/log/contrail/"
@@ -19,6 +16,20 @@ opencontrail_services:
       - "/usr/src:/usr/src:ro"
       - "/var/lib/contrail:/var/lib/contrail:ro"
       - "/var/crashes:/var/crashes"
+
+opencontrail_init_services:
+  opencontrail-compute-init:
+    image: "{{ opencontrail_agent_vrouter_image_full }}"
+    enabled: "true"
+    host_in_groups: {{ inventory_hostname in groups['compute'] }}
+  opencontrail-neutron-init:
+    image: "{{ opencontrail_agent_vrouter_image_full }}"
+    enabled: "true"
+    host_in_groups: "{{ inventory_hostname in groups['neutron-server'] }}"
+  opencontrail-heat-init:
+    image: "{{ opencontrail_agent_vrouter_image_full }}"
+    enabled: {{ enable_heat | bool }}
+    host_in_groups: {{ inventory_hostname in groups['heat-api'] }}
 
 ####################
 # Docker
