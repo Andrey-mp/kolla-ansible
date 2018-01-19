@@ -723,7 +723,9 @@ opendaylight_allowed_network_types: '"flat", "vlan", "vxlan"'
 ######################
 # OpenContrail
 ######################
-opencontrail_release: "4.1.0.0-6-{{ openstack_release }}"
+opencontrail_release: "4.1.0.0-8"
+opencontrail_base_distro: "centos7"
+opencontrail_docker_registry: "{{ docker_registry }}"
 opencontrail_api_server_ip: "{{ api_interface_address }}"
 opencontrail_api_server_port: "8082"
 

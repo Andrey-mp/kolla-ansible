@@ -6,7 +6,7 @@
     action: "start_container"
     common_options: "{{ docker_common_options }}"
     detach: False
-    image: "{{ neutron_opencontrail_init_image_full }}"
+    image: "{{ opencontrail_openstack_neutron_init_image_full }}"
     labels:
       BOOTSTRAP:
     name: "bootstrap_neutron_opencontrail_plugin"

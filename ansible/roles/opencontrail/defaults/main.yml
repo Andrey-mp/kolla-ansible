@@ -1,0 +1,140 @@
+---
+project_name: "opencontrail"
+
+opencontrail_services:
+  opencontrail-agent-vrouter:
+    container_name: "opencontrail_agent_vrouter"
+    image: "{{ opencontrail_agent_vrouter_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: >-
+      {{
+      inventory_hostname in groups['compute']
+      }}
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "kolla_logs:/var/log/contrail/"
+      - "/run:/run:shared"
+      - "/lib/modules:/lib/modules:ro"
+      - "/usr/src:/usr/src:ro"
+      - "/var/lib/contrail:/var/lib/contrail:ro"
+      - "/var/crashes:/var/crashes"
+
+####################
+# Docker
+####################
+opencontrail_install_type: "{{ kolla_install_type }}"
+opencontrail_tag: "{{ contrail_release }}-{{ opencontrail_base_distro }}-{{ openstack_release }}"
+
+opencontrail_agent_vrouter_image: "{{ opencontrail_docker_registry }}/agent-vrouter"
+opencontrail_agent_vrouter_tag: "{{ opencontrail_tag }}"
+opencontrail_agent_vrouter_image_full: "{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
+
+opencontrail_agent_vrouter_init_kernel_image: "{{ opencontrail_docker_registry }}/agent-vrouter-init-kernel"
+opencontrail_agent_vrouter_init_kernel_tag: "{{ opencontrail_tag }}"
+opencontrail_agent_vrouter_init_kernel_image_full: "{{ opencontrail_agent_vrouter_init_kernel_image }}:{{ opencontrail_agent_vrouter_init_kernel_tag }}"
+
+opencontrail_analytics_alarm_gen_image: "{{ opencontrail_docker_registry }}/analytics-alarm-gen"
+opencontrail_analytics_alarm_gen_tag: "{{ opencontrail_tag }}"
+opencontrail_analytics_alarm_gen_image_full: "{{ opencontrail_analytics_alarm_gen_image }}:{{ opencontrail_analytics_alarm_gen_tag }}"
+
+opencontrail_analytics_api_image: "{{ opencontrail_docker_registry }}/analytics-api"
+opencontrail_analytics_api_tag: "{{ opencontrail_tag }}"
+opencontrail_analytics_api_image_full: "{{ opencontrail_analytics_api_image }}:{{ opencontrail_analytics_api_tag }}"
+
+opencontrail_analytics_collector_image: "{{ opencontrail_docker_registry }}/analytics-collector"
+opencontrail_analytics_collector_tag: "{{ opencontrail_tag }}"
+opencontrail_analytics_collector_image_full: "{{ opencontrail_analytics_collector_image }}:{{ opencontrail_analytics_collector_tag }}"
+
+opencontrail_analytics_query_engine_image: "{{ opencontrail_docker_registry }}/analytics-query-engine"
+opencontrail_analytics_query_engine_tag: "{{ opencontrail_tag }}"
+opencontrail_analytics_query_engine_image_full: "{{ opencontrail_analytics_query_engine_image }}:{{ opencontrail_analytics_query_engine_tag }}"
+
+opencontrail_analytics_snmp_collector_image: "{{ opencontrail_docker_registry }}/analytics-snmp-collector"
+opencontrail_analytics_snmp_collector_tag: "{{ opencontrail_tag }}"
+opencontrail_analytics_snmp_collector_image_full: "{{ opencontrail_analytics_snmp_collector_image }}:{{ opencontrail_analytics_snmp_collector_tag }}"
+
+opencontrail_analytics_topology_image: "{{ opencontrail_docker_registry }}/analytics-topology"
+opencontrail_analytics_topology_tag: "{{ opencontrail_tag }}"
+opencontrail_analytics_topology_image_full: "{{ opencontrail_analytics_topology_image }}:{{ opencontrail_analytics_topology_tag }}"
+
+opencontrail_controller_config_api_image: "{{ opencontrail_docker_registry }}/controller-config-api"
+opencontrail_controller_config_api_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_config_api_image_full: "{{ opencontrail_controller_config_api_image }}:{{ opencontrail_controller_config_api_tag }}"
+
+opencontrail_controller_config_devicemgr_image: "{{ opencontrail_docker_registry }}/controller-config-devicemgr"
+opencontrail_controller_config_devicemgr_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_config_devicemgr_image_full: "{{ opencontrail_controller_config_devicemgr_image }}:{{ opencontrail_controller_config_devicemgr_tag }}"
+
+opencontrail_controller_config_schema_image: "{{ opencontrail_docker_registry }}/controller-config-schema"
+opencontrail_controller_config_schema_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_config_schema_image_full: "{{ opencontrail_controller_config_schema_image }}:{{ opencontrail_controller_config_schema_tag }}"
+
+opencontrail_controller_config_svcmonitor_image: "{{ opencontrail_docker_registry }}/controller-config-svcmonitor"
+opencontrail_controller_config_svcmonitor_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_config_svcmonitor_image_full: "{{ opencontrail_controller_config_svcmonitor_image }}:{{ opencontrail_controller_config_svcmonitor_tag }}"
+
+opencontrail_controller_control_control_image: "{{ opencontrail_docker_registry }}/controller-control-control"
+opencontrail_controller_control_control_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_control_control_image_full: "{{ opencontrail_controller_control_control_image }}:{{ opencontrail_controller_control_control_tag }}"
+
+opencontrail_controller_control_dns_image: "{{ opencontrail_docker_registry }}/controller-control-dns"
+opencontrail_controller_control_dns_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_control_dns_image_full: "{{ opencontrail_controller_control_dns_image }}:{{ opencontrail_controller_control_dns_tag }}"
+
+opencontrail_controller_control_named_image: "{{ opencontrail_docker_registry }}/controller-control-named"
+opencontrail_controller_control_named_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_control_named_image_full: "{{ opencontrail_controller_control_named_image }}:{{ opencontrail_controller_control_named_tag }}"
+
+opencontrail_controller_webui_job_image: "{{ opencontrail_docker_registry }}/controller-webui-job"
+opencontrail_controller_webui_job_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_webui_job_image_full: "{{ opencontrail_controller_webui_job_image }}:{{ opencontrail_controller_webui_job_tag }}"
+
+opencontrail_controller_webui_web_image: "{{ opencontrail_docker_registry }}/controller-webui-web"
+opencontrail_controller_webui_web_tag: "{{ opencontrail_tag }}"
+opencontrail_controller_webui_web_image_full: "{{ opencontrail_controller_webui_web_image }}:{{ opencontrail_controller_webui_web_tag }}"
+
+opencontrail_external_cassandra_image: "{{ opencontrail_docker_registry }}/external-cassandra"
+opencontrail_external_cassandra_tag: "{{ opencontrail_tag }}"
+opencontrail_external_cassandra_image_full: "{{ opencontrail_external_cassandra_image }}:{{ opencontrail_external_cassandra_tag }}"
+
+opencontrail_external_cassandra_init_image: "{{ opencontrail_docker_registry }}/external-cassandra-init"
+opencontrail_external_cassandra_init_tag: "{{ opencontrail_tag }}"
+opencontrail_external_cassandra_init_image_full: "{{ opencontrail_external_cassandra_init_image }}:{{ opencontrail_external_cassandra_init_tag }}"
+
+opencontrail_external_kafka_image: "{{ opencontrail_docker_registry }}/external-kafka"
+opencontrail_external_kafka_tag: "{{ opencontrail_tag }}"
+opencontrail_external_kafka_image_full: "{{ opencontrail_external_kafka_image }}:{{ opencontrail_external_kafka_tag }}"
+
+opencontrail_external_rabbitmq_image: "{{ opencontrail_docker_registry }}/external-rabbitmq"
+opencontrail_external_rabbitmq_tag: "{{ opencontrail_tag }}"
+opencontrail_external_rabbitmq_image_full: "{{ opencontrail_external_rabbitmq_image }}:{{ opencontrail_external_rabbitmq_tag }}"
+
+opencontrail_external_rabbitmq_init_image: "{{ opencontrail_docker_registry }}/external-rabbitmq-init"
+opencontrail_external_rabbitmq_init_tag: "{{ opencontrail_tag }}"
+opencontrail_external_rabbitmq_init_image_full: "{{ opencontrail_external_rabbitmq_init_image }}:{{ opencontrail_external_rabbitmq_init_tag }}"
+
+opencontrail_external_zookeeper_image: "{{ opencontrail_docker_registry }}/external-zookeeper"
+opencontrail_external_zookeeper_tag: "{{ opencontrail_tag }}"
+opencontrail_external_zookeeper_image_full: "{{ opencontrail_external_zookeeper_image }}:{{ opencontrail_external_zookeeper_tag }}"
+
+opencontrail_external_zookeeper_init_image: "{{ opencontrail_docker_registry }}/external-zookeeper-init"
+opencontrail_external_zookeeper_init_tag: "{{ opencontrail_tag }}"
+opencontrail_external_zookeeper_init_image_full: "{{ opencontrail_external_zookeeper_init_image }}:{{ opencontrail_external_zookeeper_init_tag }}"
+
+opencontrail_nodemgr_image: "{{ opencontrail_docker_registry }}/nodemgr"
+opencontrail_nodemgr_tag: "{{ opencontrail_tag }}"
+opencontrail_nodemgr_image_full: "{{ opencontrail_nodemgr_image }}:{{ opencontrail_nodemgr_tag }}"
+
+opencontrail_openstack_compute_init_image: "{{ opencontrail_docker_registry }}/openstack-compute-init"
+opencontrail_openstack_compute_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_compute_init_image_full: "{{ opencontrail_openstack_compute_init_image }}:{{ opencontrail_openstack_compute_init_tag }}"
+
+opencontrail_openstack_heat_init_image: "{{ opencontrail_docker_registry }}/openstack-heat-init"
+opencontrail_openstack_heat_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"
+
+opencontrail_openstack_neutron_init_image: "{{ opencontrail_docker_registry }}/openstack-neutron-init"
+opencontrail_openstack_neutron_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_openstack_neutron_init_image }}:{{ opencontrail_openstack_neutron_init_tag }}"
+
