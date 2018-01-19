@@ -257,3 +257,10 @@ nova_enabled_notification_topics: "{{ nova_notification_topics | selectattr('ena
 # VMware
 ####################
 vmware_vcenter_datastore_regex: ".*"
+
+####################
+# OpenContrail
+####################
+nova_compute_opencontrail_init_image: "contrail-openstack-compute-init"
+nova_compute_opencontrail_init_tag: "{{ opencontrail_release }}"
+nova_compute_opencontrail_init_image_full: "{{ nova_compute_opencontrail_init_image }}:{{ nova_compute_opencontrail_init_tag }}"
