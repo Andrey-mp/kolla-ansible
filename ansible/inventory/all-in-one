@@ -185,6 +185,9 @@ control
 [tacker:children]
 control
 
+[vitrage:children]
+control
+
 # Tempest
 [tempest:children]
 control
@@ -290,6 +293,9 @@ neutron
 neutron
 
 # Ceph
+[ceph-mds:children]
+ceph
+
 [ceph-mgr:children]
 ceph
 
@@ -492,9 +498,6 @@ ceilometer
 [ceilometer-notification:children]
 ceilometer
 
-[ceilometer-collector:children]
-ceilometer
-
 [ceilometer-compute:children]
 compute
 
@@ -596,3 +599,19 @@ tacker
 
 [tacker-conductor:children]
 tacker
+
+# Vitrage
+[vitrage-api:children]
+vitrage
+
+[vitrage-notifier:children]
+vitrage
+
+[vitrage-graph:children]
+vitrage
+
+[vitrage-collector:children]
+vitrage
+
+[vitrage-ml:children]
+vitrage

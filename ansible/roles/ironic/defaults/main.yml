@@ -6,11 +6,11 @@ project_name: "ironic"
 ####################
 ironic_database_name: "ironic"
 ironic_database_user: "ironic"
-ironic_database_address: "{{ kolla_internal_fqdn }}:{{ database_port }}"
+ironic_database_address: "{{ database_address }}:{{ database_port }}"
 
 ironic_inspector_database_name: "ironic_inspector"
 ironic_inspector_database_user: "ironic_inspector"
-ironic_inspector_database_address: "{{ kolla_internal_fqdn }}:{{ database_port }}"
+ironic_inspector_database_address: "{{ database_address }}:{{ database_port }}"
 
 
 ####################
@@ -50,8 +50,8 @@ ironic_internal_endpoint: "{{ internal_protocol }}://{{ kolla_internal_fqdn }}:{
 ironic_public_endpoint: "{{ public_protocol }}://{{ kolla_external_fqdn }}:{{ ironic_api_port }}"
 
 ironic_inspector_admin_endpoint: "{{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ ironic_inspector_port }}"
-ironic_inspector_internal_endpoint: "{{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ ironic_inspector_port }}"
-ironic_inspector_public_endpoint: "{{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ ironic_inspector_port }}"
+ironic_inspector_internal_endpoint: "{{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ ironic_inspector_port }}"
+ironic_inspector_public_endpoint: "{{ public_protocol }}://{{ kolla_external_fqdn }}:{{ ironic_inspector_port }}"
 
 ironic_logging_debug: "{{ openstack_logging_debug }}"
 

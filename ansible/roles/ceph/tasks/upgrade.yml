@@ -4,6 +4,9 @@
 - include: start_mons.yml
   when: inventory_hostname in groups['ceph-mon']
 
+- include: start_mgrs.yml
+  when: inventory_hostname in groups['ceph-mgr']
+
 - include: start_osds.yml
   when: inventory_hostname in groups['ceph-osd']
 
@@ -11,3 +14,8 @@
   when:
     - enable_ceph_rgw | bool
     - inventory_hostname in groups['ceph-rgw']
+
+- include: start_mdss.yml
+  when:
+    - enable_ceph_mds | bool
+    - inventory_hostname in groups['ceph-mds']
