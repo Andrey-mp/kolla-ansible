@@ -345,6 +345,13 @@
         tags: ovs-dpdk,
         when: "(enable_openvswitch | bool) and (enable_ovs_dpdk | bool)"}
 
+- name: Apply role opencontrail
+  hosts: opencontrail
+  roles:
+    - { role: opencontrail,
+        tags: opencontrail,
+        when: enable_opencontrail | bool }
+
 - name: Apply role nova-hyperv
   gather_facts: false
   hosts:
