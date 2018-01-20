@@ -28,7 +28,7 @@ opencontrail_init_services:
     host_in_groups: "{{ inventory_hostname in groups['neutron-server'] }}"
   opencontrail-heat-init:
     image: "{{ opencontrail_agent_vrouter_image_full }}"
-    enabled: {{ enable_heat | bool }}
+    enabled: "{{ enable_heat | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
 
 ####################
