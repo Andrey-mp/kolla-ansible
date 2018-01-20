@@ -21,7 +21,7 @@ opencontrail_init_services:
   opencontrail-compute-init:
     image: "{{ opencontrail_agent_vrouter_image_full }}"
     enabled: "true"
-    host_in_groups: {{ inventory_hostname in groups['compute'] }}
+    host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
   opencontrail-neutron-init:
     image: "{{ opencontrail_agent_vrouter_image_full }}"
     enabled: "true"
@@ -29,7 +29,7 @@ opencontrail_init_services:
   opencontrail-heat-init:
     image: "{{ opencontrail_agent_vrouter_image_full }}"
     enabled: {{ enable_heat | bool }}
-    host_in_groups: {{ inventory_hostname in groups['heat-api'] }}
+    host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
 
 ####################
 # Docker
