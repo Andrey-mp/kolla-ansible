@@ -85,3 +85,10 @@ openstack_heat_auth: "{{ openstack_auth }}"
 heat_git_repository: "{{ kolla_dev_repos_git }}/{{ project_name }}"
 heat_dev_repos_pull: "{{ kolla_dev_repos_pull }}"
 heat_dev_mode: "{{ kolla_dev_mode }}"
+
+####################
+# OpenContrail
+####################
+opencontrail_openstack_heat_init_image: "{{ opencontrail_docker_registry }}/openstack-heat-init"
+opencontrail_openstack_heat_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"

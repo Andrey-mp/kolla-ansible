@@ -330,3 +330,10 @@ notification_drivers:
     enabled: "{{ enable_opendaylight_qos | bool }}"
 
 neutron_notification_drivers: "{{ notification_drivers|selectattr('enabled', 'equalto', true)|list }}"
+
+####################
+# OpenContrail
+####################
+opencontrail_openstack_neutron_init_image: "{{ opencontrail_docker_registry }}/openstack-neutron-init"
+opencontrail_openstack_neutron_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_openstack_neutron_init_image }}:{{ opencontrail_openstack_neutron_init_tag }}"
