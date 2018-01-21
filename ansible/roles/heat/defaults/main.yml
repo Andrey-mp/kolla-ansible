@@ -12,6 +12,7 @@ heat_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ kolla_dev_repos_directory ~ '/heat/heat:/var/lib/kolla/venv/lib/python2.7/site-packages/heat' if heat_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
+      - "opt_plugin:/opt/plugin/"
   heat-api-cfn:
     container_name: heat_api_cfn
     group: heat-api-cfn
@@ -32,6 +33,10 @@ heat_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "{{ kolla_dev_repos_directory ~ '/heat/heat:/var/lib/kolla/venv/lib/python2.7/site-packages/heat' if heat_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
+  heat-api-opencontrail-init:
+    group: heat-api
+    enabled: true
+    image: "{{ opencontrail_openstack_heat_init_image_full }}"
 
 ####################
 # Database

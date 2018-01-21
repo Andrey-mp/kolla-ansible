@@ -1,0 +1,20 @@
+---
+- name: Running Neutron opencontrail bootstrap container
+  vars:
+    neutron_server: "{{ neutron_services['neutron-server'] }}"
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    detach: False
+    image: "{{ opencontrail_openstack_neutron_init_image_full }}"
+    labels:
+      BOOTSTRAP:
+    name: "neutron_server_opencontrail_init"
+    restart_policy: "never"
+    volumes: "{{ neutron_server.volumes }}"
+  when:
+    - neutron_plugin_agent == 'opencontrail'
+    - neutron_server.enabled | bool
+    - neutron_server.host_in_groups | bool
+  run_once: True
+  delegate_to: "{{ groups[neutron_server.group][0] }}"
