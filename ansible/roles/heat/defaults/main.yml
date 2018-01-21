@@ -89,6 +89,6 @@ heat_dev_mode: "{{ kolla_dev_mode }}"
 ####################
 # OpenContrail
 ####################
-opencontrail_openstack_heat_init_image: "{{ opencontrail_docker_registry }}/openstack-heat-init"
+opencontrail_openstack_heat_init_image: "contrail-openstack-heat-init"
 opencontrail_openstack_heat_init_tag: "{{ opencontrail_tag }}"
-opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"
+opencontrail_openstack_heat_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"

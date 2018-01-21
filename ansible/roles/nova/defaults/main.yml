@@ -262,6 +262,6 @@ vmware_vcenter_datastore_regex: ".*"
 ####################
 # OpenContrail
 ####################
-opencontrail_openstack_compute_init_image: "{{ opencontrail_docker_registry }}/openstack-compute-init"
+opencontrail_openstack_compute_init_image: "contrail-openstack-compute-init"
 opencontrail_openstack_compute_init_tag: "{{ opencontrail_tag }}"
-opencontrail_openstack_compute_init_image_full: "{{ opencontrail_openstack_compute_init_image }}:{{ opencontrail_openstack_compute_init_tag }}"
+opencontrail_openstack_compute_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_compute_init_image }}:{{ opencontrail_openstack_compute_init_tag }}"
