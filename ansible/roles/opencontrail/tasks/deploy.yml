@@ -1,4 +1,7 @@
 ---
+- debug:
+  msg: "image compute: {{ opencontrail_openstack_compute_init_image_full }}"
+
 - include: config.yml
 
 - name: Flush Handlers
