@@ -18,16 +18,16 @@ opencontrail_services:
       - "/var/crashes:/var/crashes"
 
 opencontrail_init_services:
-  opencontrail-compute-init:
-    image: "{{ opencontrail_agent_vrouter_image_full }}"
-    enabled: "true"
+  nova-compute-opencontrail-init:
+    image: "{{ opencontrail_openstack_compute_init_image_full }}"
+    enabled: "{{ not enable_nova_fake | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
-  opencontrail-neutron-init:
-    image: "{{ opencontrail_agent_vrouter_image_full }}"
-    enabled: "true"
+  neutron-server-opencontrail-init:
+    image: "{{ opencontrail_openstack_neutron_init_image_full }}"
+    enabled: true
     host_in_groups: "{{ inventory_hostname in groups['neutron-server'] }}"
-  opencontrail-heat-init:
-    image: "{{ opencontrail_agent_vrouter_image_full }}"
+  heat-api-opencontrail-init:
+    image: "{{ opencontrail_openstack_heat_init_image_full }}"
     enabled: "{{ enable_heat | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
 
@@ -133,3 +133,15 @@ opencontrail_external_zookeeper_init_image_full: "{{ opencontrail_docker_registr
 opencontrail_nodemgr_image: "contrail-nodemgr"
 opencontrail_nodemgr_tag: "{{ opencontrail_tag }}"
 opencontrail_nodemgr_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_nodemgr_image }}:{{ opencontrail_nodemgr_tag }}"
+
+opencontrail_openstack_compute_init_image: "contrail-openstack-compute-init"
+opencontrail_openstack_compute_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_compute_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_compute_init_image }}:{{ opencontrail_openstack_compute_init_tag }}"
+
+opencontrail_openstack_neutron_init_image: "contrail-openstack-neutron-init"
+opencontrail_openstack_neutron_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_neutron_init_image }}:{{ opencontrail_openstack_neutron_init_tag }}"
+
+opencontrail_openstack_heat_init_image: "contrail-openstack-heat-init"
+opencontrail_openstack_heat_init_tag: "{{ opencontrail_tag }}"
+opencontrail_openstack_heat_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"

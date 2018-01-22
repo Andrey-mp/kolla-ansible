@@ -231,6 +231,14 @@
         tags: keystone,
         when: enable_keystone | bool }
 
+- name: Apply role opencontrail
+  hosts:
+    - opencontrail
+  roles:
+    - { role: opencontrail,
+        tags: opencontrail,
+        when: enable_opencontrail | bool }
+
 - name: Apply role ceph
   gather_facts: false
   hosts:
@@ -344,13 +352,6 @@
     - { role: ovs-dpdk,
         tags: ovs-dpdk,
         when: "(enable_openvswitch | bool) and (enable_ovs_dpdk | bool)"}
-
-- name: Apply role opencontrail
-  hosts: opencontrail
-  roles:
-    - { role: opencontrail,
-        tags: opencontrail,
-        when: enable_opencontrail | bool }
 
 - name: Apply role nova-hyperv
   gather_facts: false

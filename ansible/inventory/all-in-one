@@ -116,6 +116,11 @@ manila-share
 [opendaylight:children]
 network
 
+[opencontrail:children]
+control
+network
+compute
+
 [cinder:children]
 control
 

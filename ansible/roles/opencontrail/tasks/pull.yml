@@ -8,3 +8,9 @@
     - item.value.enabled | bool
     - item.value.host_in_groups | bool
   with_dict: "{{ opencontrail_services | combine(opencontrail_init_services) }}"
+
+- name: Share init images to other services
+  set_fact:
+    opencontrail_openstack_compute_init_image_full="{{ opencontrail_openstack_compute_init_image_full }}"
+    opencontrail_openstack_neutron_init_image_full="{{ opencontrail_openstack_neutron_init_image_full }}"
+    opencontrail_openstack_heat_init_image_full="{{ opencontrail_openstack_heat_init_image_full }}"

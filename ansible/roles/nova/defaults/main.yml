@@ -134,10 +134,6 @@ nova_services:
       - "{{ node_config_directory }}/nova-compute-ironic/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "kolla_logs:/var/log/kolla/"
-  nova-compute-opencontrail-init:
-    group: "compute"
-    image: "{{ opencontrail_openstack_compute_init_image_full }}"
-    enabled: "{{ not enable_nova_fake | bool }}"
 
 ####################
 # Ceph
@@ -266,6 +262,3 @@ vmware_vcenter_datastore_regex: ".*"
 ####################
 # OpenContrail
 ####################
-opencontrail_openstack_compute_init_image: "contrail-openstack-compute-init"
-opencontrail_openstack_compute_init_tag: "{{ opencontrail_tag }}"
-opencontrail_openstack_compute_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_compute_init_image }}:{{ opencontrail_openstack_compute_init_tag }}"
