@@ -16,5 +16,5 @@
     state: stopped
   when:
     - container_facts['opencontrail_api'] is not defined
-    - inventory_hostname in groups[openvcontrali_api.group]
+    - inventory_hostname in groups['control']
     - opencontrail_api.enabled | bool
