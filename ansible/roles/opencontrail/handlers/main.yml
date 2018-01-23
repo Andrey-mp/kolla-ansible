@@ -1,0 +1,14 @@
+---
+- include: config_database.yml
+
+- include: config.yml
+
+#- include: webui.yml
+
+#- include: control.yml
+
+#- include: analytics_database.yml
+
+#- include: analytics.yml
+
+#- include: vrouter.yml

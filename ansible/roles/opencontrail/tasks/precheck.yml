@@ -1,1 +1,20 @@
 ---
+- name: Get container facts
+  kolla_container_facts:
+    name:
+      - opencontrail_api
+  register: container_facts
+
+- name: Checking free port for API
+  vars:
+    opencontrail_api: "{{ opencontrail_services['opencontrail-api'] }}"
+  wait_for:
+    host: "{{ opencontrail_api_server_ip }}"
+    port: "{{ opencontrail_api_server_port }}"
+    connect_timeout: 1
+    timeout: 1
+    state: stopped
+  when:
+    - container_facts['opencontrail_api'] is not defined
+    - inventory_hostname in groups[openvcontrali_api.group]
+    - opencontrail_api.enabled | bool

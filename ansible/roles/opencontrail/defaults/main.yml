@@ -1,6 +1,157 @@
 ---
 project_name: "opencontrail"
 
+contrail_nodes: "{% for host in groups['etcd'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+
+opencontrail_services:
+  # Config database services
+  opencontrail-configdb-nodemgr:
+    container_name: "opencontrail_configdb_nodemgr"
+    image: "{{ opencontrail_nodemgr_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      NODE_TYPE: "database"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/contrail/"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/crashes:/var/crashes"
+  opencontrail-configdb-zookeeper:
+    container_name: "opencontrail_configdb_zookeeper"
+    image: "{{ opencontrail_external_zookeeper_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      ZOOKEEPER_NODES: "{{ contrail_nodes }}"
+      ZOOKEEPER_PORTS: "2888:3888"
+      ZOOKEEPER_PORT: "2181"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/zookeeper/"
+  opencontrail-configdb-cassandra:
+    container_name: "opencontrail_configdb_cassandra"
+    image: "{{ opencontrail_external_cassandra_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      CASSANDRA_SEEDS: "{{ contrail_nodes }}"
+      CASSANDRA_START_RPC: "true"
+      CASSANDRA_CLUSTER_NAME: "contrail_database"
+      CASSANDRA_PORT: "9161"
+      CASSANDRA_CQL_PORT: "9041"
+      CASSANDRA_SSL_STORAGE_PORT: "7013"
+      CASSANDRA_STORAGE_PORT: "7012"
+      CASSANDRA_JMX_LOCAL_PORT: "7201"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/cassandra/"
+
+  # Config API services
+  opencontrail-config-nodemgr:
+    container_name: "opencontrail_config_nodemgr"
+    image: "{{ opencontrail_nodemgr_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      NODE_TYPE: "config"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/contrail/"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/var/crashes:/var/crashes"
+  opencontrail-config-api:
+    container_name: "opencontrail_config_api"
+    image: "{{ opencontrail_controller_config_api_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/contrail/"
+  opencontrail-config-devicemgr:
+    container_name: "opencontrail_config_devicemgr"
+    image: "{{ opencontrail_controller_config_devicemgr_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/contrail/"
+  opencontrail-config-schema:
+    container_name: "opencontrail_config_schema"
+    image: "{{ opencontrail_controller_config_schema_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/contrail/"
+  opencontrail-config-svcmonitor:
+    container_name: "opencontrail_config_svcmonitor"
+    image: "{{ opencontrail_controller_config_svcmonitor_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    environment:
+      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "kolla_logs:/var/log/contrail/"
+
+
+
+#  opencontrail-:
+#    container_name: "opencontrail_"
+#    image: "{{ opencontrail__image_full }}"
+#    enabled: "{{ enable_opencontrail }}"
+#    group: opencontrail
+#    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+#    environment:
+#      CONTROLLER_NODES: "{{ contrail_nodes }}"
+#      CLOUD_ORCHESTRATOR: "openstack"
+#      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+#    volumes:
+#      - "/etc/localtime:/etc/localtime:ro"
+#      - "/run:/run:shared"
+#      - "kolla_logs:/var/log/contrail/"
+
+
+
 opencontrail_services:
   opencontrail-agent-vrouter:
     container_name: "opencontrail_agent_vrouter"
@@ -106,29 +257,13 @@ opencontrail_external_cassandra_image: "contrail-external-cassandra"
 opencontrail_external_cassandra_tag: "{{ opencontrail_tag }}"
 opencontrail_external_cassandra_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_cassandra_image }}:{{ opencontrail_external_cassandra_tag }}"
 
-opencontrail_external_cassandra_init_image: "contrail-external-cassandra-init"
-opencontrail_external_cassandra_init_tag: "{{ opencontrail_tag }}"
-opencontrail_external_cassandra_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_cassandra_init_image }}:{{ opencontrail_external_cassandra_init_tag }}"
-
 opencontrail_external_kafka_image: "contrail-external-kafka"
 opencontrail_external_kafka_tag: "{{ opencontrail_tag }}"
 opencontrail_external_kafka_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_kafka_image }}:{{ opencontrail_external_kafka_tag }}"
 
-opencontrail_external_rabbitmq_image: "contrail-external-rabbitmq"
-opencontrail_external_rabbitmq_tag: "{{ opencontrail_tag }}"
-opencontrail_external_rabbitmq_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_rabbitmq_image }}:{{ opencontrail_external_rabbitmq_tag }}"
-
-opencontrail_external_rabbitmq_init_image: "contrail-external-rabbitmq-init"
-opencontrail_external_rabbitmq_init_tag: "{{ opencontrail_tag }}"
-opencontrail_external_rabbitmq_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_rabbitmq_init_image }}:{{ opencontrail_external_rabbitmq_init_tag }}"
-
 opencontrail_external_zookeeper_image: "contrail-external-zookeeper"
 opencontrail_external_zookeeper_tag: "{{ opencontrail_tag }}"
 opencontrail_external_zookeeper_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_zookeeper_image }}:{{ opencontrail_external_zookeeper_tag }}"
-
-opencontrail_external_zookeeper_init_image: "contrail-external-zookeeper-init"
-opencontrail_external_zookeeper_init_tag: "{{ opencontrail_tag }}"
-opencontrail_external_zookeeper_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_external_zookeeper_init_image }}:{{ opencontrail_external_zookeeper_init_tag }}"
 
 opencontrail_nodemgr_image: "contrail-nodemgr"
 opencontrail_nodemgr_tag: "{{ opencontrail_tag }}"

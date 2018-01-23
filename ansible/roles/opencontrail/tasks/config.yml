@@ -1,1 +1,23 @@
 ---
+- name: Share OpenContrails' init images to other services
+  set_fact:
+    opencontrail_openstack_compute_init_image_full: "{{ opencontrail_openstack_compute_init_image_full }}"
+    opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_openstack_neutron_init_image_full }}"
+    opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_init_image_full }}"
+
+- name: Check opencontrail containers
+  kolla_docker:
+    action: "compare_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ item.value.container_name }}"
+    image: "{{ item.value.image }}"
+    privileged: "{{ item.value.privileged | default(False) }}"
+    volumes: "{{ item.value.volumes }}"
+  register: check_opencontrail_containers
+  when:
+    - action != "config"
+    - item.value.enabled | bool
+    - item.value.host_in_groups | bool
+  with_dict: "{{ opencontrail_services }}"
+  notify:
+    - "Restart {{ item.key }} container"
