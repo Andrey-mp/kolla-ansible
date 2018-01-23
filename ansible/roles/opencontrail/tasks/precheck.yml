@@ -7,7 +7,7 @@
 
 - name: Checking free port for API
   vars:
-    opencontrail_api: "{{ opencontrail_services['opencontrail-config-api'] }}"
+    opencontrail_config_api: "{{ opencontrail_services['opencontrail-config-api'] }}"
   wait_for:
     host: "{{ opencontrail_api_server_ip }}"
     port: "{{ opencontrail_api_server_port }}"
@@ -17,4 +17,4 @@
   when:
     - container_facts['opencontrail_api'] is not defined
     - inventory_hostname in groups['control']
-    - opencontrail_api.enabled | bool
+    - opencontrail_config_api.enabled | bool

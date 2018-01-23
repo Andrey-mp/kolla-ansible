@@ -152,7 +152,6 @@ opencontrail_services:
 
 
 
-opencontrail_services:
   opencontrail-agent-vrouter:
     container_name: "opencontrail_agent_vrouter"
     image: "{{ opencontrail_agent_vrouter_image_full }}"
