@@ -85,7 +85,7 @@ opencontrail_services:
     environment:
       CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -99,7 +99,7 @@ opencontrail_services:
     environment:
       CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -113,7 +113,7 @@ opencontrail_services:
     environment:
       CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -127,7 +127,7 @@ opencontrail_services:
     environment:
       CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -144,7 +144,7 @@ opencontrail_services:
 #    environment:
 #      CONTROLLER_NODES: "{{ contrail_nodes }}"
 #      CLOUD_ORCHESTRATOR: "openstack"
-#      RABBITMQ_NODE_PORT: "{{ role_rabbitmq_port }}"
+#      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
 #    volumes:
 #      - "/etc/localtime:/etc/localtime:ro"
 #      - "/run:/run:shared"
