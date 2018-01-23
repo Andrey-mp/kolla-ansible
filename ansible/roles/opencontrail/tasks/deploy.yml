@@ -1,6 +1,15 @@
 ---
 - debug:
-  msg: "image compute: {{ opencontrail_openstack_compute_init_image_full }}"
+    msg: "image compute 1 - {{ opencontrail_openstack_compute_init_image_full }}"
+
+- name: Share init images to other services
+  set_fact:
+    opencontrail_openstack_compute_init_image_full: "{{ opencontrail_openstack_compute_init_image_full }}"
+    opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_openstack_neutron_init_image_full }}"
+    opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_init_image_full }}"
+
+- debug:
+    msg: "image compute 2 - {{ opencontrail_openstack_compute_init_image_full }}"
 
 - include: config.yml
 
