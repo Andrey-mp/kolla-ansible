@@ -18,7 +18,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/contrail/"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/var/crashes:/var/crashes"
   opencontrail-configdb-zookeeper:
@@ -36,7 +35,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/zookeeper/"
   opencontrail-configdb-cassandra:
     container_name: "opencontrail_configdb_cassandra"
     image: "{{ opencontrail_external_cassandra_image_full }}"
@@ -57,7 +55,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/cassandra/"
 
   # Config API services
   opencontrail-config-nodemgr:
@@ -73,7 +70,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/contrail/"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/var/crashes:/var/crashes"
   opencontrail-config-api:
@@ -89,7 +85,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/contrail/"
   opencontrail-config-devicemgr:
     container_name: "opencontrail_config_devicemgr"
     image: "{{ opencontrail_controller_config_devicemgr_image_full }}"
@@ -103,7 +98,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/contrail/"
   opencontrail-config-schema:
     container_name: "opencontrail_config_schema"
     image: "{{ opencontrail_controller_config_schema_image_full }}"
@@ -117,7 +111,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/contrail/"
   opencontrail-config-svcmonitor:
     container_name: "opencontrail_config_svcmonitor"
     image: "{{ opencontrail_controller_config_svcmonitor_image_full }}"
@@ -131,7 +124,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "kolla_logs:/var/log/contrail/"
 
 
 
@@ -148,7 +140,6 @@ opencontrail_services:
 #    volumes:
 #      - "/etc/localtime:/etc/localtime:ro"
 #      - "/run:/run:shared"
-#      - "kolla_logs:/var/log/contrail/"
 
 
 
@@ -160,7 +151,6 @@ opencontrail_services:
 #    host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
 #    volumes:
 #      - "/etc/localtime:/etc/localtime:ro"
-#      - "kolla_logs:/var/log/contrail/"
 #      - "/run:/run:shared"
 #      - "/lib/modules:/lib/modules:ro"
 #      - "/usr/src:/usr/src:ro"
