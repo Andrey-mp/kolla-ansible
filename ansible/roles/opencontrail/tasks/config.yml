@@ -13,6 +13,7 @@
     image: "{{ item.value.image }}"
     privileged: "{{ item.value.privileged | default(False) }}"
     volumes: "{{ item.value.volumes }}"
+    environment: "{{ item.value.environment }}"
   register: check_opencontrail_containers
   when:
     - action != "config"

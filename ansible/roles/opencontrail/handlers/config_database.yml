@@ -10,6 +10,7 @@
     name: "{{ service.container_name }}"
     image: "{{ service.image }}"
     volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
   when:
     - action != "config"
     - service.enabled | bool
@@ -26,6 +27,7 @@
     name: "{{ service.container_name }}"
     image: "{{ service.image }}"
     volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
   when:
     - action != "config"
     - service.enabled | bool
@@ -42,6 +44,7 @@
     name: "{{ service.container_name }}"
     image: "{{ service.image }}"
     volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
   when:
     - action != "config"
     - service.enabled | bool
