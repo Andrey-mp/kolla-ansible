@@ -14,12 +14,12 @@ opencontrail_services:
     environment:
       CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      NODE_TYPE: "database"
+      NODEMGR_TYPE: "database"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/var/crashes:/var/crashes"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/crashes:/var/crashes:shared"
   opencontrail-configdb-zookeeper:
     container_name: "opencontrail_configdb_zookeeper"
     image: "{{ opencontrail_external_zookeeper_image_full }}"
@@ -66,12 +66,12 @@ opencontrail_services:
     environment:
       CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      NODE_TYPE: "config"
+      NODEMGR_TYPE: "config"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/var/crashes:/var/crashes"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/var/crashes:/var/crashes:shared"
   opencontrail-config-api:
     container_name: "opencontrail_config_api"
     image: "{{ opencontrail_controller_config_api_image_full }}"
@@ -155,7 +155,7 @@ opencontrail_services:
 #      - "/lib/modules:/lib/modules:ro"
 #      - "/usr/src:/usr/src:ro"
 #      - "/var/lib/contrail:/var/lib/contrail:ro"
-#      - "/var/crashes:/var/crashes"
+#      - "/var/crashes:/var/crashes:shared"
 
 opencontrail_init_services:
   nova-compute-opencontrail-init:
