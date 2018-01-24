@@ -18,7 +18,7 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/var/crashes:/var/crashes:shared"
   opencontrail-configdb-zookeeper:
     container_name: "opencontrail_configdb_zookeeper"
@@ -70,7 +70,7 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/var/crashes:/var/crashes:shared"
   opencontrail-config-api:
     container_name: "opencontrail_config_api"
