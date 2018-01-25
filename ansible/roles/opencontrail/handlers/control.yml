@@ -1,0 +1,70 @@
+---
+- name: Restart opencontrail-control-nodemgr container
+  vars:
+    service_name: "opencontrail-control-nodemgr"
+    service: "{{ opencontrail_services[service_name] }}"
+    opencontrail_control_nodemgr_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - opencontrail_control_nodemgr_container | changed
+- name: Restart opencontrail-control-control container
+  vars:
+    service_name: "opencontrail-control-control"
+    service: "{{ opencontrail_services[service_name] }}"
+    opencontrail_control_control_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - opencontrail_control_control_container | changed
+- name: Restart opencontrail-control-named container
+  vars:
+    service_name: "opencontrail-control-named"
+    service: "{{ opencontrail_services[service_name] }}"
+    opencontrail_control_named_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - opencontrail_control_named_container | changed
+- name: Restart opencontrail-control-dns container
+  vars:
+    service_name: "opencontrail-control-dns"
+    service: "{{ opencontrail_services[service_name] }}"
+    opencontrail_control_dns_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - opencontrail_control_dns_container | changed
+

@@ -3,9 +3,9 @@
 
 - include: config.yml
 
-#- include: webui.yml
+- include: webui.yml
 
-#- include: control.yml
+- include: control.yml
 
 #- include: analytics_database.yml
 

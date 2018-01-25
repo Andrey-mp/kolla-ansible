@@ -1,0 +1,36 @@
+---
+- name: Restart opencontrail-webui-web container
+  vars:
+    service_name: "opencontrail-webui-web"
+    service: "{{ opencontrail_services[service_name] }}"
+    opencontrail_webui_web_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - opencontrail_webui_web_container | changed
+- name: Restart opencontrail-webui-job container
+  vars:
+    service_name: "opencontrail-webui-job"
+    service: "{{ opencontrail_services[service_name] }}"
+    opencontrail_webui_job_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - opencontrail_webui_job_container | changed
+
