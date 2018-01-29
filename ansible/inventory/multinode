@@ -140,7 +140,6 @@ network
 
 [opencontrail:children]
 control
-network
 compute
 
 [cinder:children]
@@ -315,6 +314,25 @@ neutron
 
 [neutron-bgp-dragent:children]
 neutron
+
+# OpenContrail
+[opencontrail-configdb:children]
+control
+
+[opencontrail-config:children]
+control
+
+[opencontrail-webui:children]
+control
+
+[opencontrail-control:children]
+control
+
+[opencontrail-analyticsdb:children]
+control
+
+[opencontrail-analytics:children]
+control
 
 # Ceph
 [ceph-mds:children]

@@ -1,7 +1,13 @@
 ---
 project_name: "opencontrail"
 
-contrail_nodes: "{% for host in groups['etcd'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+config_nodes: "{% for host in groups['opencontrail-config'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+configdb_nodes: "{% for host in groups['opencontrail-configdb'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+control_nodes: "{% for host in groups['opencontrail-control'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+analyticsdb_nodes: "{% for host in groups['opencontrail-analyticsdb'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+analytics_nodes: "{% for host in groups['opencontrail-analytics'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+
+rabbitmq_nodes: "{% for host in groups['rabbitmq'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 
 opencontrail_services:
   # Config database services
@@ -10,10 +16,10 @@ opencontrail_services:
     image: "{{ opencontrail_nodemgr_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-configdb'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
       NODE_TYPE: "database"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -24,11 +30,10 @@ opencontrail_services:
     image: "{{ opencontrail_external_zookeeper_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-configdb'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      ZOOKEEPER_NODES: "{{ contrail_nodes }}"
+      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
       ZOOKEEPER_PORTS: "2888:3888"
       ZOOKEEPER_PORT: "2181"
     volumes:
@@ -39,11 +44,10 @@ opencontrail_services:
     image: "{{ opencontrail_external_cassandra_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-configdb'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      CASSANDRA_SEEDS: "{{ contrail_nodes }}"
+      CASSANDRA_SEEDS: "{{ configdb_nodes }}"
       CASSANDRA_START_RPC: "true"
       CASSANDRA_CLUSTER_NAME: "contrail_database"
       CASSANDRA_PORT: "9161"
@@ -61,9 +65,9 @@ opencontrail_services:
     image: "{{ opencontrail_nodemgr_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
       NODE_TYPE: "config"
     volumes:
@@ -75,10 +79,13 @@ opencontrail_services:
     image: "{{ opencontrail_controller_config_api_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -88,10 +95,13 @@ opencontrail_services:
     image: "{{ opencontrail_controller_config_devicemgr_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -101,10 +111,13 @@ opencontrail_services:
     image: "{{ opencontrail_controller_config_schema_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -114,10 +127,14 @@ opencontrail_services:
     image: "{{ opencontrail_controller_config_svcmonitor_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -129,11 +146,11 @@ opencontrail_services:
     image: "{{ opencontrail_controller_webui_web_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-webui'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -142,11 +159,11 @@ opencontrail_services:
     image: "{{ opencontrail_controller_webui_job_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-webui'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -157,9 +174,9 @@ opencontrail_services:
     image: "{{ opencontrail_nodemgr_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
       NODE_TYPE: "config"
     volumes:
@@ -171,10 +188,12 @@ opencontrail_services:
     image: "{{ opencontrail_controller_control_control_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -184,10 +203,12 @@ opencontrail_services:
     image: "{{ opencontrail_controller_control_named_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -197,17 +218,196 @@ opencontrail_services:
     image: "{{ opencontrail_controller_control_dns_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
-    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
     environment:
-      CONTROLLER_NODES: "{{ contrail_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
 
   # Analytics DB services
+  opencontrail-analyticsdb-kafka:
+    container_name: "opencontrail_analyticsdb_kafka"
+    image: "{{ opencontrail_external_kafka_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_PORT: "2182"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analyticsdb-zookeeper:
+    container_name: "opencontrail_analyticsdb_zookeeper"
+    image: "{{ opencontrail_external_zookeeper_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_PORTS: "4888:5888"
+      ZOOKEEPER_PORT: "2182"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analyticsdb-cassandra:
+    container_name: "opencontrail_analyticsdb_cassandra"
+    image: "{{ opencontrail_external_cassandra_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CASSANDRA_SEEDS: "{{ analyticsdb_nodes }}"
+      CASSANDRA_START_RPC: "true"
+      CASSANDRA_CLUSTER_NAME: "contrail_analytics"
+      CASSANDRA_PORT: "9160"
+      CASSANDRA_CQL_PORT: "9042"
+      CASSANDRA_SSL_STORAGE_PORT: "7011"
+      CASSANDRA_STORAGE_PORT: "7010"
+      CASSANDRA_JMX_LOCAL_PORT: "7200"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+
   # Analytics services
+  opencontrail-analytics-nodemgr:
+    container_name: "opencontrail_analytics_nodemgr"
+    image: "{{ opencontrail_nodemgr_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      CLOUD_ORCHESTRATOR: "openstack"
+      NODE_TYPE: "config"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+      - "/var/crashes:/var/crashes:shared"
+  opencontrail-analytics-api:
+    container_name: "opencontrail_analytics_api"
+    image: "{{ opencontrail_controller_analytics_api_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analytics-collector:
+    container_name: "opencontrail_analytics_collector"
+    image: "{{ opencontrail_controller_analytics_collector_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analytics-query-engine:
+    container_name: "opencontrail_analytics_query_engine"
+    image: "{{ opencontrail_controller_analytics_query_engine_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analytics-alarm-gen:
+    container_name: "opencontrail_analytics_alarm_gen"
+    image: "{{ opencontrail_controller_analytics_alarm_gen_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analytics-snmp-collector:
+    container_name: "opencontrail_analytics_snmp_collector"
+    image: "{{ opencontrail_controller_analytics_snmp_collector_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+  opencontrail-analytics-topology:
+    container_name: "opencontrail_analytics_topology"
+    image: "{{ opencontrail_controller_analytics_topology_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    environment:
+      CLOUD_ORCHESTRATOR: "openstack"
+      CONFIGDB_NODES: "{{ configdb_nodes }}"
+      CONFIG_NODES: "{{ config_nodes }}"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
+      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
+
   # VRouter services
 
 #  opencontrail-:
@@ -217,9 +417,18 @@ opencontrail_services:
 #    group: opencontrail
 #    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
 #    environment:
-#      CONTROLLER_NODES: "{{ contrail_nodes }}"
 #      CLOUD_ORCHESTRATOR: "openstack"
+#      CONFIGDB_NODES: "{{ configdb_nodes }}"
+#      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+#      CONFIG_NODES: "{{ config_nodes }}"
+#      CONTROL_NODES: "{{ control_nodes }}"
+#      ANALYTICS_NODES: "{{ analytics_nodes }}"
+#      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+#      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+#      KAFKA_NODES: "{{ analyticsdb_nodes }}"
+#      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
 #      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+#      REDIS_NODES: "{{ analytics_nodes }}" ???????????
 #    volumes:
 #      - "/etc/localtime:/etc/localtime:ro"
 #      - "/run:/run:shared"

@@ -233,7 +233,14 @@
 
 - name: Apply role opencontrail
   hosts:
-    - opencontrail
+    - opencontrail-configdb
+    - opencontrail-config
+    - opencontrail-webui
+    - opencontrail-control
+    - opencontrail-analyticsdb
+    - opencontrail-analytics
+    - compute
+  serial: '{{ serial|default("0") }}'
   roles:
     - { role: opencontrail,
         tags: opencontrail,
