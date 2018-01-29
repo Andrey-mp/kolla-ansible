@@ -295,7 +295,7 @@ opencontrail_services:
       - "/var/crashes:/var/crashes:shared"
   opencontrail-analytics-api:
     container_name: "opencontrail_analytics_api"
-    image: "{{ opencontrail_controller_analytics_api_image_full }}"
+    image: "{{ opencontrail_analytics_api_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
@@ -314,7 +314,7 @@ opencontrail_services:
       - "/run:/run:shared"
   opencontrail-analytics-collector:
     container_name: "opencontrail_analytics_collector"
-    image: "{{ opencontrail_controller_analytics_collector_image_full }}"
+    image: "{{ opencontrail_analytics_collector_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
@@ -333,7 +333,7 @@ opencontrail_services:
       - "/run:/run:shared"
   opencontrail-analytics-query-engine:
     container_name: "opencontrail_analytics_query_engine"
-    image: "{{ opencontrail_controller_analytics_query_engine_image_full }}"
+    image: "{{ opencontrail_analytics_query_engine_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
@@ -352,7 +352,7 @@ opencontrail_services:
       - "/run:/run:shared"
   opencontrail-analytics-alarm-gen:
     container_name: "opencontrail_analytics_alarm_gen"
-    image: "{{ opencontrail_controller_analytics_alarm_gen_image_full }}"
+    image: "{{ opencontrail_analytics_alarm_gen_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
@@ -371,7 +371,7 @@ opencontrail_services:
       - "/run:/run:shared"
   opencontrail-analytics-snmp-collector:
     container_name: "opencontrail_analytics_snmp_collector"
-    image: "{{ opencontrail_controller_analytics_snmp_collector_image_full }}"
+    image: "{{ opencontrail_analytics_snmp_collector_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
@@ -390,7 +390,7 @@ opencontrail_services:
       - "/run:/run:shared"
   opencontrail-analytics-topology:
     container_name: "opencontrail_analytics_topology"
-    image: "{{ opencontrail_controller_analytics_topology_image_full }}"
+    image: "{{ opencontrail_analytics_topology_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
