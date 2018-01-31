@@ -11,4 +11,4 @@
 
 - include: analytics.yml
 
-#- include: vrouter.yml
+- include: vrouter.yml
