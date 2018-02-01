@@ -480,6 +480,10 @@ opencontrail_init_services:
     image: "{{ opencontrail_openstack_heat_init_image_full }}"
     enabled: "{{ enable_heat | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
+  opencontrail-agent-vrouter-init-kernel:
+    image: "{{ opencontrail_agent_vrouter_init_kernel_image_full }}"
+    enabled: "{{ enable_opencontrail | bool }}"
+    host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
 
 ####################
 # Docker
