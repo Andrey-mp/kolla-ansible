@@ -1,8 +1,8 @@
 ---
-- include: config.yml
+#- include: bootstrap.yml
+#  when: inventory_hostname in groups['compute']
 
-- include: bootstrap.yml
-  when: inventory_hostname in groups['compute']
+- include: config.yml
 
 - name: Flush Handlers
   meta: flush_handlers
