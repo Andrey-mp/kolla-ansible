@@ -7,6 +7,7 @@
     common_options: "{{ docker_common_options }}"
     detach: False
     image: "{{ opencontrail_agent_vrouter_init_kernel_image_full }}"
+    environment: "{{ agent_vrouter.environment }}"
     privileged: "{{ agent_vrouter.privileged }}"
     labels:
       BOOTSTRAP:
