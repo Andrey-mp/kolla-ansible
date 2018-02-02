@@ -98,3 +98,11 @@ hmac_keys = {{ osprofiler_secret }}
 connection_string = elasticsearch://{{ elasticsearch_address }}:{{ elasticsearch_port }}
 {% endif %}
 {% endif %}
+
+[oslo_concurrency]
+lock_path = /var/lib/zun/tmp
+
+{% if zun_policy_file is defined %}
+[oslo_policy]
+policy_file = {{ zun_policy_file }}
+{% endif %}

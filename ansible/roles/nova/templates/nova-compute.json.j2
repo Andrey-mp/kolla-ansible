@@ -6,20 +6,19 @@
             "dest": "/etc/nova/nova.conf",
             "owner": "nova",
             "perm": "0600"
-        },
-        {
-            "source": "{{ container_config_directory }}/policy.json",
-            "dest": "/etc/nova/policy.json",
-            "owner": "nova",
-            "perm": "0600",
-            "optional": true
-        },
+        }
         {
             "source": "{{ container_config_directory }}/rootwrap.conf",
             "dest": "/etc/nova/rootwrap.conf",
             "owner": "root",
             "perm": "0640"
-        }{% if nova_backend == "rbd" %},
+        }{% if nova_policy_file is defined %},
+        {
+            "source": "{{ container_config_directory }}/{{ nova_policy_file }}",
+            "dest": "/etc/nova/{{ nova_policy_file }}",
+            "owner": "nova",
+            "perm": "0600"
+        }{% endif %}{% if nova_backend == "rbd" %},
         {
             "source": "{{ container_config_directory }}/ceph.*",
             "dest": "/etc/ceph/",

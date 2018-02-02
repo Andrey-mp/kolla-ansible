@@ -16,7 +16,6 @@ event_connection = mysql+pymysql://{{ panko_database_user }}:{{ panko_database_p
 metering_connection = mysql+pymysql://{{ panko_database_user }}:{{ panko_database_password }}@{{ panko_database_mysql_address }}:{{ panko_database_port }}/{{ panko_database_name }}
 {% endif %}
 
-
 [keystone_authtoken]
 auth_uri = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_public_port }}
 project_domain_name = {{ default_project_domain_name }}
@@ -30,3 +29,8 @@ auth_type = password
 memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcache_secret_key }}
 memcached_servers = {% for host in groups['memcached'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ memcached_port }}{% if not loop.last %},{% endif %}{% endfor %}
+
+{% if panko_policy_file is defined %}
+[oslo_policy]
+policy_file = {{ panko_policy_file }}
+{% endif %}

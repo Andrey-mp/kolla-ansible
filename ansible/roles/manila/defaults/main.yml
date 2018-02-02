@@ -48,7 +48,7 @@ manila_services:
 ## Database
 #####################
 manila_database_name: "manila"
-manila_database_user: "manila"
+manila_database_user: "{% if use_preconfigured_databases | bool and use_common_mariadb_user | bool %}{{ database_user }}{% else %}manila{% endif %}"
 manila_database_address: "{{ database_address }}:{{ database_port }}"
 
 
@@ -101,8 +101,25 @@ manila_backends:
   - name: "generic"
     driver: "generic"
     enabled: "{{ enable_manila_backend_generic | bool }}"
+    protocols:
+      - "NFS"
+      - "CIFS"
   - name: "hnas1"
     driver: "hnas"
     enabled: "{{ enable_manila_backend_hnas | bool }}"
+    protocols:
+      - "NFS"
+      - "CIFS"
+  - name: "cephfsnative1"
+    driver: "cephfsnative"
+    enabled: "{{ enable_manila_backend_cephfs_native | bool }}"
+    protocols:
+      - "CEPHFS"
+  - name: "cephfsnfs1"
+    driver: "cephfsnfs"
+    enabled: "{{ enable_manila_backend_cephfs_nfs | bool }}"
+    protocols:
+      - "NFS"
+      - "CIFS"
 
 manila_enabled_backends: "{{ manila_backends|selectattr('enabled', 'equalto', true)|list }}"

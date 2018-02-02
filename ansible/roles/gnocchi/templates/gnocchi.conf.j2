@@ -35,7 +35,6 @@ workers = {{ openstack_service_workers }}
 [indexer]
 url = mysql+pymysql://{{ gnocchi_database_user }}:{{ gnocchi_database_password }}@{{ gnocchi_database_address }}/{{ gnocchi_database_name }}
 
-
 [keystone_authtoken]
 auth_uri = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_public_port }}/v3
 project_domain_id = {{ default_project_domain_id }}
@@ -49,6 +48,11 @@ auth_type = password
 memcache_security_strategy = ENCRYPT
 memcache_secret_key = {{ memcache_secret_key }}
 memcached_servers = {% for host in groups['memcached'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ memcached_port }}{% if not loop.last %},{% endif %}{% endfor %}
+
+{% if gnocchi_policy_file is defined %}
+[oslo_policy]
+policy_file = {{ gnocchi_policy_file }}
+{% endif %}
 
 [storage]
 {% if gnocchi_backend_storage == 'file' %}
