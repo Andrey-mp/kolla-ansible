@@ -434,7 +434,7 @@ opencontrail_services:
       CLOUD_ORCHESTRATOR: "openstack"
       CONFIG_NODES: "{{ config_nodes }}"
       ANALYTICS_NODES: "{{ analytics_nodes }}"
-#      PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
+      PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
