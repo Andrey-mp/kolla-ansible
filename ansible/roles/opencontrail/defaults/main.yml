@@ -73,6 +73,8 @@ opencontrail_services:
       CONFIG_NODES: "{{ config_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -89,6 +91,8 @@ opencontrail_services:
       CONFIG_NODES: "{{ config_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -105,6 +109,8 @@ opencontrail_services:
       CONFIG_NODES: "{{ config_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -122,6 +128,8 @@ opencontrail_services:
       ANALYTICS_NODES: "{{ analytics_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -181,6 +189,8 @@ opencontrail_services:
       CONFIG_NODES: "{{ config_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -196,6 +206,8 @@ opencontrail_services:
       CONFIG_NODES: "{{ config_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -211,6 +223,8 @@ opencontrail_services:
       CONFIG_NODES: "{{ config_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -309,6 +323,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -328,6 +344,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -347,6 +365,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -366,6 +386,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -385,6 +407,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -404,6 +428,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
       RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+      RABBITMQ_USER: "{{ rabbitmq_user }}"
+      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -442,31 +468,6 @@ opencontrail_services:
       - "/usr/src:/usr/src:ro"
       - "/var/lib/contrail:/var/lib/contrail:ro"
       - "/var/crashes:/var/crashes:shared"
-
-
-#  opencontrail-:
-#    container_name: "opencontrail_"
-#    image: "{{ opencontrail__image_full }}"
-#    enabled: "{{ enable_opencontrail }}"
-#    group: opencontrail
-#    host_in_groups: "{{ inventory_hostname in groups['control'] }}"
-#    environment:
-#      CLOUD_ORCHESTRATOR: "openstack"
-#      CONFIGDB_NODES: "{{ configdb_nodes }}"
-#      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
-#      CONFIG_NODES: "{{ config_nodes }}"
-#      CONTROL_NODES: "{{ control_nodes }}"
-#      ANALYTICS_NODES: "{{ analytics_nodes }}"
-#      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-#      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-#      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-#      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-#      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-#      REDIS_NODES: "{{ analytics_nodes }}" ???????????
-#    volumes:
-#      - "/etc/localtime:/etc/localtime:ro"
-#      - "/run:/run:shared"
-
 
 opencontrail_init_services:
   nova-compute-opencontrail-init:
