@@ -118,3 +118,20 @@
     - service.enabled | bool
     - service.host_in_groups | bool
     - opencontrail_analytics_snmp_collector_container | changed
+- name: Restart redis container
+  vars:
+    service_name: "redis"
+    service: "{{ opencontrail_services[service_name] }}"
+    redis_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+  kolla_docker:
+    action: "recreate_or_restart_container"
+    common_options: "{{ docker_common_options }}"
+    name: "{{ service.container_name }}"
+    image: "{{ service.image }}"
+    volumes: "{{ service.volumes }}"
+    environment: "{{ service.environment }}"
+  when:
+    - action != "config"
+    - service.enabled | bool
+    - service.host_in_groups | bool
+    - redis_container | changed

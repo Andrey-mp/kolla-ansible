@@ -433,6 +433,15 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
+  redis:
+    container_name: "redis"
+    image: "{{ redis_image_full }}"
+    enabled: "{{ enable_opencontrail }}"
+    group: opencontrail
+    host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run:/run:shared"
 
   # VRouter services
   opencontrail-agent-vrouter-nodemgr:
@@ -585,3 +594,7 @@ opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_docker_registry
 opencontrail_openstack_heat_init_image: "contrail-openstack-heat-init"
 opencontrail_openstack_heat_init_tag: "{{ opencontrail_tag }}"
 opencontrail_openstack_heat_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"
+
+redis_image: "redis"
+redis_tag: "4.0.2"
+redis_image_full: "{{ redis_image }}:{{ redis_tag }}"
