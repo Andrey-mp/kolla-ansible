@@ -8,6 +8,17 @@ analyticsdb_nodes: "{% for host in groups['opencontrail-analyticsdb'] %}{{ hostv
 analytics_nodes: "{% for host in groups['opencontrail-analytics'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
 
 rabbitmq_nodes: "{% for host in groups['rabbitmq'] %}{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+rabbitmq_env:
+  RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
+  RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
+  RABBITMQ_USER: "{{ rabbitmq_user }}"
+  RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+
+common_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  CONFIGDB_NODES: "{{ configdb_nodes }}"
+  ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+  CONFIG_NODES: "{{ config_nodes }}"
 
 opencontrail_services:
   # Config database services
@@ -71,10 +82,6 @@ opencontrail_services:
       CONFIGDB_NODES: "{{ configdb_nodes }}"
       ZOOKEEPER_NODES: "{{ configdb_nodes }}"
       CONFIG_NODES: "{{ config_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -84,15 +91,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ common_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -439,6 +438,8 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
+    labels:
+      REDIS:
     environment:
       CLOUD_ORCHESTRATOR: "openstack"
     volumes:
