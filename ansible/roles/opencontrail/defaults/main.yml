@@ -14,11 +14,38 @@ rabbitmq_env:
   RABBITMQ_USER: "{{ rabbitmq_user }}"
   RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
 
-common_env:
+auth_env:
+  AAA_MODE: "{{ opencontrail_aaa_mode }}"
+#  KEYSTONE_AUTH_ADMIN_USER: {{ .Values.endpoints.identity.auth.admin.username }}
+#  KEYSTONE_AUTH_ADMIN_TENANT: {{ .Values.endpoints.identity.auth.admin.project_name }}
+#  KEYSTONE_AUTH_ADMIN_PASSWORD: {{ .Values.endpoints.identity.auth.admin.password }}
+#  KEYSTONE_AUTH_USER_DOMAIN_NAME: {{ .Values.endpoints.identity.auth.admin.user_domain_name }}
+#  KEYSTONE_AUTH_PROJECT_DOMAIN_NAME: {{ .Values.endpoints.identity.auth.admin.project_domain_name }}
+#  KEYSTONE_AUTH_URL_VERSION: {{ .Values.endpoints.identity.path.default }}
+#  KEYSTONE_AUTH_HOST: {{ $identityURIParts._0 }}
+#  KEYSTONE_AUTH_PROTO: {{ .Values.endpoints.identity.scheme.default }}
+#  KEYSTONE_AUTH_ADMIN_PORT: {{ .Values.endpoints.identity.port.admin.default | quote }}
+#  KEYSTONE_AUTH_PUBLIC_PORT: {{ .Values.endpoints.identity.port.api.default | quote }}
+
+# to allow define envirinment for service from merged dicts let's define partial env-s
+# also it decrease copy-pasted definitions
+config_env:
   CLOUD_ORCHESTRATOR: "openstack"
   CONFIGDB_NODES: "{{ configdb_nodes }}"
   ZOOKEEPER_NODES: "{{ configdb_nodes }}"
   CONFIG_NODES: "{{ config_nodes }}"
+control_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  CONFIGDB_NODES: "{{ configdb_nodes }}"
+  CONFIG_NODES: "{{ config_nodes }}"
+analytics_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  CONFIGDB_NODES: "{{ configdb_nodes }}"
+  CONFIG_NODES: "{{ config_nodes }}"
+  ANALYTICS_NODES: "{{ analytics_nodes }}"
+  ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+  ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
+  KAFKA_NODES: "{{ analyticsdb_nodes }}"
 
 opencontrail_services:
   # Config database services
@@ -64,8 +91,8 @@ opencontrail_services:
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
     environment:
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
       CLOUD_ORCHESTRATOR: "openstack"
+      ANALYTICS_NODES: "{{ analytics_nodes }}"
       NODE_TYPE: "config"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -77,7 +104,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ common_env | combine(rabbitmq_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -87,7 +114,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ common_env | combine(rabbitmq_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -97,15 +124,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ config_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -115,16 +134,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ config_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -178,14 +188,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ control_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -195,14 +198,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ control_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -212,14 +208,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ control_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -308,18 +297,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -329,18 +307,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -350,18 +317,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -371,18 +327,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -392,18 +337,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -413,18 +347,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      RABBITMQ_NODES: "{{ rabbitmq_nodes }}"
-      RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
-      RABBITMQ_USER: "{{ rabbitmq_user }}"
-      RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"

@@ -734,6 +734,7 @@ opencontrail_tag: "{{ opencontrail_release }}-{{ opencontrail_base_distro }}-{{ 
 opencontrail_docker_registry: "{{ docker_registry }}"
 opencontrail_api_server_ip: "{{ api_interface_address }}"
 opencontrail_api_server_port: "8082"
+opencontrail_aaa_mode: "cloud-admin"
 
 #######################################
 # XenAPI - Support XenAPI for XenServer
