@@ -77,11 +77,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      CONFIGDB_NODES: "{{ configdb_nodes }}"
-      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
-      CONFIG_NODES: "{{ config_nodes }}"
+    environment: "{{ common_env | combine(rabbitmq_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
