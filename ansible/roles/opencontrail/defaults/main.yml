@@ -25,6 +25,7 @@ auth_env:
   KEYSTONE_AUTH_PROTO: "{{ admin_protocol }}"
   KEYSTONE_AUTH_ADMIN_PORT: "{{ keystone_admin_port }}"
   KEYSTONE_AUTH_PUBLIC_PORT: "{{ keystone_public_port }}"
+  KEYSTONE_AUTH_REGION_NAME: "{{ openstack_region_name }}"
 
 # to allow define envirinment for service from merged dicts let's define partial env-s
 # also it decrease copy-pasted definitions
@@ -197,6 +198,7 @@ opencontrail_services:
   opencontrail-control-named:
     container_name: "opencontrail_control_named"
     image: "{{ opencontrail_controller_control_named_image_full }}"
+    privileged: True
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
