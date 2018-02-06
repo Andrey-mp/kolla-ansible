@@ -48,6 +48,12 @@ analytics_env:
   ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
   ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
   KAFKA_NODES: "{{ analyticsdb_nodes }}"
+vrouter_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  AAA_MODE: "{{ opencontrail_aaa_mode }}"
+  CONFIG_NODES: "{{ config_nodes }}"
+  ANALYTICS_NODES: "{{ analytics_nodes }}"
+  PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
 
 opencontrail_services:
   # Config database services
@@ -384,13 +390,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
-    specific_environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      AAA_MODE: "{{ opencontrail_aaa_mode }}"
-      CONFIG_NODES: "{{ config_nodes }}"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
-    environment: "{{ opencontrail_services['opencontrail-agent-vrouter']['specific_environment'] | combine(auth_env) }}"
+    environment: "{{ vrouter_env | combine(auth_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
