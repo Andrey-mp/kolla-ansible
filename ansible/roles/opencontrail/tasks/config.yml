@@ -1,4 +1,18 @@
 ---
+- name: Ensuring crashes directories exist
+  file:
+    path: "/var/crashes"
+    state: "directory"
+    recurse: yes
+
+- name: Setting crashes sysctl values
+  become: true
+  sysctl: name={{ item.name }} value={{ item.value }} sysctl_set=yes
+  with_items:
+    - { name: "kernel.core_pattern", value: "/var/crashes/core.%e.%p.%h.%t"}
+  when:
+    - set_sysctl | bool
+
 - name: Share OpenContrails' init images to other services
   set_fact:
     opencontrail_openstack_compute_init_image_full: "{{ opencontrail_openstack_compute_init_image_full }}"
