@@ -54,7 +54,7 @@ vrouter_env:
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
   CONFIG_NODES: "{{ config_nodes }}"
   ANALYTICS_NODES: "{{ analytics_nodes }}"
-  PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
+#  PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
 
 opencontrail_services:
   # Config database services
