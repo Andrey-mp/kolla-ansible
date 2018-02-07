@@ -419,7 +419,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/lib/modules:/lib/modules:ro"
       - "/usr/src:/usr/src:ro"
-      - "/var/lib/contrail:/var/lib/contrail:ro"
       - "/var/crashes/opencontrail_agent_vrouter:/var/crashes:shared"
 
 opencontrail_init_services:
