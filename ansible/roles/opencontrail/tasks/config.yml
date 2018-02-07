@@ -1,15 +1,15 @@
 ---
 - name: Ensuring crashes directories exist
   file:
-    path: "/var/crashes/{{ item.value.container_name }}"
+    path: "/var/crashes/{{ item }}"
     state: "directory"
     recurse: yes
   with_items:
-    - "/var/crashes/opencontrail_config"
-    - "/var/crashes/opencontrail_control"
-    - "/var/crashes/opencontrail_analyticsdb"
-    - "/var/crashes/opencontrail_analytics"
-    - "/var/crashes/opencontrail_agent_vrouter"
+    - "opencontrail_config"
+    - "opencontrail_control"
+    - "opencontrail_analyticsdb"
+    - "opencontrail_analytics"
+    - "opencontrail_agent_vrouter"
 
 - name: Setting crashes sysctl values
   become: true
