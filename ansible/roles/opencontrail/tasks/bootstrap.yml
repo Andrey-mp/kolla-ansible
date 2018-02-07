@@ -12,6 +12,7 @@
     labels:
       BOOTSTRAP:
     name: "opencontrail_agent_vrouter_init"
+    pid_mode: "host"
     restart_policy: "never"
     volumes: "{{ agent_vrouter.volumes }}"
   when:
