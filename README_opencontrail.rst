@@ -19,6 +19,8 @@ Prepare host
 If the registry is your own then you may need to add it to insecure registries list:
 File /etc/docker/daemon.json should have addition:
 
+::
+
   {
     "insecure-registries": ["$registry_ip:5000"]
   }
@@ -26,6 +28,8 @@ File /etc/docker/daemon.json should have addition:
 Or URL of registry instead of $registry_ip:5000
 
 Then install/update required tools:
+
+::
 
   yum install -y python-pip
   pip install -U pip
@@ -37,6 +41,8 @@ Prepare kolla-ansible
 
 Download it to local directory, Install it to the system:
 
+::
+
   git clone https://github.com/cloudscaling/kolla-ansible
   cd kolla-ansible
   pip install -r requirements.txt
@@ -45,6 +51,8 @@ Download it to local directory, Install it to the system:
 
 Copy configuration files to /etc/kolla, Copy inventory files to local directory:
 
+::
+
   cp -r /usr/share/kolla-ansible/etc_examples/kolla /etc/kolla/
   cp /usr/share/kolla-ansible/ansible/inventory/* .
 
@@ -52,6 +60,8 @@ Then you need to create /etc/kolla/globals.yml with next tempate. Please change 
 Please use two different interfaces for all-in-one inventory - in other case after vrouter start all IP-s are moved to vhost0 and ansible playbooks willn't find anything on base interface and fail.
 Please change {{contrail_version}} to your version of contrails' images like "5.0.0-126".
 Please change {{contrail_docker_registry}} to URL of your docker registry.
+
+::
 
   ---
   kolla_base_distro: "centos"
@@ -96,15 +106,21 @@ Run kolla-ansible
 
 Run next commands:
 
+::
+
   kolla-genpwd
   kolla-ansible -i all-in-one bootstrap-servers
   kolla-ansible pull -i all-in-one
 
 Check images:
 
+::
+
   docker images
 
 Prepare libvirt:
+
+::
 
   mkdir -p /etc/kolla/config/nova
   cat <<EOF > /etc/kolla/config/nova/nova-compute.conf
@@ -115,32 +131,28 @@ Prepare libvirt:
 
 Deploy all:
 
+::
+
   kolla-ansible prechecks -i all-in-one
   kolla-ansible deploy -i all-in-one
 
 Check running container:
 
+::
+
   docker ps -a
 
 Prepare adminrc for openstack:
+
+::
 
   kolla-ansible post-deploy
 
 And then you can run test steps:
 
+::
+
   # test it
   pip install python-openstackclient
   source /etc/kolla/admin-openrc.sh
   /usr/share/kolla-ansible/init-runonce
-
-
-
-
-
-
-
-
-
-
-
-
