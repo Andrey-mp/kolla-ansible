@@ -1,7 +1,7 @@
 ---
 - name: Running Vrouter module build & insert it into kernel
   vars:
-    agent_build_driver_init: "{{ opencontrail_services['opencontrail-agent-build-driver-init'] }}"
+    agent_build_driver_init: "{{ opencontrail_init_services['opencontrail-agent-build-driver-init'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
@@ -14,7 +14,7 @@
     restart_policy: "never"
     volumes: "{{ agent_build_driver_init.volumes }}"
   when:
-    - agent_vrouter.enabled | bool
+    - agent_build_driver_init.enabled | bool
     - neutron_plugin_agent == 'opencontrail'
     - inventory_hostname in groups['compute']
     - hostvars[inventory_hostname]['ansible_distribution'] == 'Ubuntu'
@@ -25,7 +25,7 @@
 - name: Running Vrouter module build & insert it into kernel
   vars:
     agent_vrouter: "{{ opencontrail_services['opencontrail-agent-vrouter'] }}"
-    agent_vrouter_init: "{{ opencontrail_services['opencontrail-agent-vrouter-init-kernel'] }}"
+    agent_vrouter_init: "{{ opencontrail_init_services['opencontrail-agent-vrouter-init-kernel'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
