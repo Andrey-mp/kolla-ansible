@@ -434,6 +434,13 @@ opencontrail_init_services:
     image: "{{ opencontrail_openstack_heat_init_image_full }}"
     enabled: "{{ enable_heat | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
+  opencontrail-agent-build-driver-init:
+    image: "{{ opencontrail_agent_build_driver_init_image_full }}"
+    enabled: "{{ enable_opencontrail | bool }}"
+    host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
+    volumes:
+      - "/lib/modules:/lib/modules:ro"
+      - "/usr/src:/usr/src:ro"
   opencontrail-agent-vrouter-init-kernel:
     image: "{{ opencontrail_agent_vrouter_init_kernel_image_full }}"
     enabled: "{{ enable_opencontrail | bool }}"
@@ -445,6 +452,10 @@ opencontrail_init_services:
 opencontrail_agent_vrouter_image: "contrail-agent-vrouter"
 opencontrail_agent_vrouter_tag: "{{ opencontrail_tag }}"
 opencontrail_agent_vrouter_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
+
+opencontrail_agent_build_driver_init_image: "contrail-agent-build-driver-init"
+opencontrail_agent_build_driver_init_tag: ""{{ opencontrail_release }}-ubuntu16-{{ openstack_release }}""
+opencontrail_agent_build_driver_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_agent_build_driver_init_image }}:{{ opencontrail_agent_build_driver_init_tag }}"
 
 opencontrail_agent_vrouter_init_kernel_image: "contrail-agent-vrouter-init-kernel"
 opencontrail_agent_vrouter_init_kernel_tag: "{{ opencontrail_tag }}"

@@ -1,12 +1,36 @@
 ---
 - name: Running Vrouter module build & insert it into kernel
   vars:
-    agent_vrouter: "{{ opencontrail_services['opencontrail-agent-vrouter'] }}"
+    agent_build_driver_init: "{{ opencontrail_services['opencontrail-agent-build-driver-init'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
     detach: False
-    image: "{{ opencontrail_agent_vrouter_init_kernel_image_full }}"
+    image: "{{ agent_build_driver_init.image }}"
+    privileged: "True"
+    labels:
+      BOOTSTRAP:
+    name: "opencontrail_agent_build_driver_init"
+    restart_policy: "never"
+    volumes: "{{ agent_build_driver_init.volumes }}"
+  when:
+    - agent_vrouter.enabled | bool
+    - neutron_plugin_agent == 'opencontrail'
+    - inventory_hostname in groups['compute']
+    - hostvars[inventory_hostname]['ansible_distribution'] == 'Ubuntu'
+    - hostvars[inventory_hostname]['ansible_distribution_release'] == 'xenial'
+  run_once: True
+  delegate_to: "{{ groups['compute'][0] }}"
+
+- name: Running Vrouter module build & insert it into kernel
+  vars:
+    agent_vrouter: "{{ opencontrail_services['opencontrail-agent-vrouter'] }}"
+    agent_vrouter_init: "{{ opencontrail_services['opencontrail-agent-vrouter-init-kernel'] }}"
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    detach: False
+    image: "{{ agent_vrouter_init.image }}"
     environment: "{{ agent_vrouter.environment }}"
     privileged: "{{ agent_vrouter.privileged }}"
     labels:
