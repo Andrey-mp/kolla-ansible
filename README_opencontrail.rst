@@ -31,6 +31,7 @@ Then install/update required tools:
 
 ::
 
+  yum install -y epel-release
   yum install -y python-pip
   pip install -U pip
   yum install -y python-devel libffi-devel gcc openssl-devel libselinux-python
