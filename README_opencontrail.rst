@@ -27,12 +27,13 @@ File /etc/docker/daemon.json should have addition:
 
 Or URL of registry instead of $registry_ip:5000
 
-Then install/update required tools:
+Then install/update required tools (with sudo):
 
 ::
 
   yum install -y epel-release
-  yum install -y python-pip
+  yum install -y python-pip ntp
+  systemctl enable ntpd.service && systemctl start ntpd.service
   pip install -U pip
   yum install -y python-devel libffi-devel gcc openssl-devel libselinux-python
   yum install -y ansible
