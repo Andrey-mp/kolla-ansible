@@ -17,8 +17,6 @@
     - agent_build_driver_init.enabled | bool
     - neutron_plugin_agent == 'opencontrail'
     - inventory_hostname in groups['compute']
-    - hostvars[inventory_hostname]['ansible_distribution'] == 'Ubuntu'
-    - hostvars[inventory_hostname]['ansible_distribution_release'] == 'xenial'
   run_once: True
   delegate_to: "{{ groups['compute'][0] }}"
 
