@@ -437,14 +437,14 @@ opencontrail_init_services:
     host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
   opencontrail-agent-build-driver-init:
     image: "{{ opencontrail_agent_build_driver_init_image_full }}"
-    enabled: "{{ enable_opencontrail | bool }}"
+    enabled: "{{ enable_opencontrail | bool and hostvars[inventory_hostname]['ansible_distribution'] == 'Ubuntu' and hostvars[inventory_hostname]['ansible_distribution_release'] == 'xenial' }}"
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
     volumes:
       - "/lib/modules:/lib/modules"
       - "/usr/src:/usr/src"
   opencontrail-agent-vrouter-init-kernel:
     image: "{{ opencontrail_agent_vrouter_init_kernel_image_full }}"
-    enabled: "{{ enable_opencontrail | bool and hostvars[inventory_hostname]['ansible_distribution'] == 'Ubuntu' and hostvars[inventory_hostname]['ansible_distribution_release'] == 'xenial' }}"
+    enabled: "{{ enable_opencontrail | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
 
 ####################
