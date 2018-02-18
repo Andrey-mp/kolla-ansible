@@ -455,7 +455,7 @@ opencontrail_agent_vrouter_tag: "{{ opencontrail_tag }}"
 opencontrail_agent_vrouter_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
 
 opencontrail_agent_build_driver_init_image: "contrail-agent-build-driver-init"
-opencontrail_agent_build_driver_init_tag: "{{ opencontrail_release }}-ubuntu16-{{ openstack_release }}"
+opencontrail_agent_build_driver_init_tag: "{{ opencontrail_ubuntu_specific_tag }}"
 opencontrail_agent_build_driver_init_image_full: "{{ opencontrail_docker_registry }}/{{ opencontrail_agent_build_driver_init_image }}:{{ opencontrail_agent_build_driver_init_tag }}"
 
 opencontrail_agent_vrouter_init_kernel_image: "contrail-agent-vrouter-init-kernel"
