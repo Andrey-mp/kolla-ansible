@@ -139,7 +139,7 @@ neutron_services:
     container_name: "neutron_metadata_agent"
     image: "{{ neutron_metadata_agent_image_full }}"
     privileged: True
-    enabled: "{{ neutron_plugin_agent not in ['vmware_nsxv', 'opencontrail'] }}"
+    enabled: "{{ neutron_plugin_agent != 'vmware_nsxv' }}"
     host_in_groups: >-
       {{
       inventory_hostname in groups['neutron-metadata-agent']
