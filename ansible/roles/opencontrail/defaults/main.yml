@@ -452,7 +452,7 @@ opencontrail_init_services:
 ####################
 opencontrail_agent_vrouter_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-agent-vrouter"
 opencontrail_agent_vrouter_tag: "{{ opencontrail_tag }}"
-opencontrail_agent_vrouter_image_full: "{{ opencontrail_opencontrail_docker_registry }}/{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
+opencontrail_agent_vrouter_image_full: "{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
 
 opencontrail_agent_build_driver_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-agent-build-driver-init"
 opencontrail_agent_build_driver_init_tag: "{{ opencontrail_ubuntu_specific_tag }}"
