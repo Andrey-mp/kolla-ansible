@@ -450,103 +450,103 @@ opencontrail_init_services:
 ####################
 # Docker
 ####################
-opencontrail_agent_vrouter_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-agent-vrouter"
+opencontrail_agent_vrouter_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-agent-vrouter"
 opencontrail_agent_vrouter_tag: "{{ opencontrail_tag }}"
 opencontrail_agent_vrouter_image_full: "{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
 
-opencontrail_agent_build_driver_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-agent-build-driver-init"
+opencontrail_agent_build_driver_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-agent-build-driver-init"
 opencontrail_agent_build_driver_init_tag: "{{ opencontrail_ubuntu_specific_tag }}"
 opencontrail_agent_build_driver_init_image_full: "{{ opencontrail_agent_build_driver_init_image }}:{{ opencontrail_agent_build_driver_init_tag }}"
 
-opencontrail_agent_vrouter_init_kernel_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-agent-vrouter-init-kernel"
+opencontrail_agent_vrouter_init_kernel_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-agent-vrouter-init-kernel"
 opencontrail_agent_vrouter_init_kernel_tag: "{{ opencontrail_tag }}"
 opencontrail_agent_vrouter_init_kernel_image_full: "{{ opencontrail_agent_vrouter_init_kernel_image }}:{{ opencontrail_agent_vrouter_init_kernel_tag }}"
 
-opencontrail_analytics_alarm_gen_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-analytics-alarm-gen"
+opencontrail_analytics_alarm_gen_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-alarm-gen"
 opencontrail_analytics_alarm_gen_tag: "{{ opencontrail_tag }}"
 opencontrail_analytics_alarm_gen_image_full: "{{ opencontrail_analytics_alarm_gen_image }}:{{ opencontrail_analytics_alarm_gen_tag }}"
 
-opencontrail_analytics_api_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-analytics-api"
+opencontrail_analytics_api_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-api"
 opencontrail_analytics_api_tag: "{{ opencontrail_tag }}"
 opencontrail_analytics_api_image_full: "{{ opencontrail_analytics_api_image }}:{{ opencontrail_analytics_api_tag }}"
 
-opencontrail_analytics_collector_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-analytics-collector"
+opencontrail_analytics_collector_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-collector"
 opencontrail_analytics_collector_tag: "{{ opencontrail_tag }}"
 opencontrail_analytics_collector_image_full: "{{ opencontrail_analytics_collector_image }}:{{ opencontrail_analytics_collector_tag }}"
 
-opencontrail_analytics_query_engine_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-analytics-query-engine"
+opencontrail_analytics_query_engine_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-query-engine"
 opencontrail_analytics_query_engine_tag: "{{ opencontrail_tag }}"
 opencontrail_analytics_query_engine_image_full: "{{ opencontrail_analytics_query_engine_image }}:{{ opencontrail_analytics_query_engine_tag }}"
 
-opencontrail_analytics_snmp_collector_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-analytics-snmp-collector"
+opencontrail_analytics_snmp_collector_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-snmp-collector"
 opencontrail_analytics_snmp_collector_tag: "{{ opencontrail_tag }}"
 opencontrail_analytics_snmp_collector_image_full: "{{ opencontrail_analytics_snmp_collector_image }}:{{ opencontrail_analytics_snmp_collector_tag }}"
 
-opencontrail_analytics_topology_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-analytics-topology"
+opencontrail_analytics_topology_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-topology"
 opencontrail_analytics_topology_tag: "{{ opencontrail_tag }}"
 opencontrail_analytics_topology_image_full: "{{ opencontrail_analytics_topology_image }}:{{ opencontrail_analytics_topology_tag }}"
 
-opencontrail_controller_config_api_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-config-api"
+opencontrail_controller_config_api_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-config-api"
 opencontrail_controller_config_api_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_config_api_image_full: "{{ opencontrail_controller_config_api_image }}:{{ opencontrail_controller_config_api_tag }}"
 
-opencontrail_controller_config_devicemgr_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-config-devicemgr"
+opencontrail_controller_config_devicemgr_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-config-devicemgr"
 opencontrail_controller_config_devicemgr_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_config_devicemgr_image_full: "{{ opencontrail_controller_config_devicemgr_image }}:{{ opencontrail_controller_config_devicemgr_tag }}"
 
-opencontrail_controller_config_schema_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-config-schema"
+opencontrail_controller_config_schema_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-config-schema"
 opencontrail_controller_config_schema_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_config_schema_image_full: "{{ opencontrail_controller_config_schema_image }}:{{ opencontrail_controller_config_schema_tag }}"
 
-opencontrail_controller_config_svcmonitor_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-config-svcmonitor"
+opencontrail_controller_config_svcmonitor_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-config-svcmonitor"
 opencontrail_controller_config_svcmonitor_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_config_svcmonitor_image_full: "{{ opencontrail_controller_config_svcmonitor_image }}:{{ opencontrail_controller_config_svcmonitor_tag }}"
 
-opencontrail_controller_control_control_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-control-control"
+opencontrail_controller_control_control_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-control-control"
 opencontrail_controller_control_control_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_control_control_image_full: "{{ opencontrail_controller_control_control_image }}:{{ opencontrail_controller_control_control_tag }}"
 
-opencontrail_controller_control_dns_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-control-dns"
+opencontrail_controller_control_dns_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-control-dns"
 opencontrail_controller_control_dns_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_control_dns_image_full: "{{ opencontrail_controller_control_dns_image }}:{{ opencontrail_controller_control_dns_tag }}"
 
-opencontrail_controller_control_named_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-control-named"
+opencontrail_controller_control_named_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-control-named"
 opencontrail_controller_control_named_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_control_named_image_full: "{{ opencontrail_controller_control_named_image }}:{{ opencontrail_controller_control_named_tag }}"
 
-opencontrail_controller_webui_job_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-webui-job"
+opencontrail_controller_webui_job_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-webui-job"
 opencontrail_controller_webui_job_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_webui_job_image_full: "{{ opencontrail_controller_webui_job_image }}:{{ opencontrail_controller_webui_job_tag }}"
 
-opencontrail_controller_webui_web_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-controller-webui-web"
+opencontrail_controller_webui_web_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-controller-webui-web"
 opencontrail_controller_webui_web_tag: "{{ opencontrail_tag }}"
 opencontrail_controller_webui_web_image_full: "{{ opencontrail_controller_webui_web_image }}:{{ opencontrail_controller_webui_web_tag }}"
 
-opencontrail_external_cassandra_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-external-cassandra"
+opencontrail_external_cassandra_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-external-cassandra"
 opencontrail_external_cassandra_tag: "{{ opencontrail_tag }}"
 opencontrail_external_cassandra_image_full: "{{ opencontrail_external_cassandra_image }}:{{ opencontrail_external_cassandra_tag }}"
 
-opencontrail_external_kafka_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-external-kafka"
+opencontrail_external_kafka_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-external-kafka"
 opencontrail_external_kafka_tag: "{{ opencontrail_tag }}"
 opencontrail_external_kafka_image_full: "{{ opencontrail_external_kafka_image }}:{{ opencontrail_external_kafka_tag }}"
 
-opencontrail_external_zookeeper_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-external-zookeeper"
+opencontrail_external_zookeeper_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-external-zookeeper"
 opencontrail_external_zookeeper_tag: "{{ opencontrail_tag }}"
 opencontrail_external_zookeeper_image_full: "{{ opencontrail_external_zookeeper_image }}:{{ opencontrail_external_zookeeper_tag }}"
 
-opencontrail_nodemgr_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-nodemgr"
+opencontrail_nodemgr_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-nodemgr"
 opencontrail_nodemgr_tag: "{{ opencontrail_tag }}"
 opencontrail_nodemgr_image_full: "{{ opencontrail_nodemgr_image }}:{{ opencontrail_nodemgr_tag }}"
 
-opencontrail_openstack_compute_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-openstack-compute-init"
+opencontrail_openstack_compute_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-openstack-compute-init"
 opencontrail_openstack_compute_init_tag: "{{ opencontrail_tag }}"
 opencontrail_openstack_compute_init_image_full: "{{ opencontrail_openstack_compute_init_image }}:{{ opencontrail_openstack_compute_init_tag }}"
 
-opencontrail_openstack_neutron_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-openstack-neutron-init"
+opencontrail_openstack_neutron_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-openstack-neutron-init"
 opencontrail_openstack_neutron_init_tag: "{{ opencontrail_tag }}"
 opencontrail_openstack_neutron_init_image_full: "{{ opencontrail_openstack_neutron_init_image }}:{{ opencontrail_openstack_neutron_init_tag }}"
 
-opencontrail_openstack_heat_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace }}/contrail-openstack-heat-init"
+opencontrail_openstack_heat_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-openstack-heat-init"
 opencontrail_openstack_heat_init_tag: "{{ opencontrail_tag }}"
 opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_init_image }}:{{ opencontrail_openstack_heat_init_tag }}"
 
