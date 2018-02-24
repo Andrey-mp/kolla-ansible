@@ -140,6 +140,7 @@ neutron_services:
     image: "{{ neutron_metadata_agent_image_full }}"
     privileged: True
     enabled: "{{ neutron_plugin_agent != 'vmware_nsxv' }}"
+    environment: {}
     host_in_groups: >-
       {{
       inventory_hostname in groups['neutron-metadata-agent']
