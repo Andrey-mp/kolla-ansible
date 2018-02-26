@@ -74,7 +74,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "configdb_zookepeer_logs:/var/log/zookeeper"
   opencontrail-configdb-cassandra:
     container_name: "opencontrail_configdb_cassandra"
     image: "{{ opencontrail_external_cassandra_image_full }}"
@@ -95,7 +95,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "configdb_cassandra_logs:/var/log/cassandra"
 
   # Config API services
   opencontrail-config-nodemgr:
@@ -112,7 +112,8 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
+      - "configdb_cassandra_logs:/var/log/cassandra"
   opencontrail-config-api:
     container_name: "opencontrail_config_api"
     image: "{{ opencontrail_controller_config_api_image_full }}"
@@ -124,7 +125,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-config-devicemgr:
     container_name: "opencontrail_config_devicemgr"
     image: "{{ opencontrail_controller_config_devicemgr_image_full }}"
@@ -136,7 +137,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-config-schema:
     container_name: "opencontrail_config_schema"
     image: "{{ opencontrail_controller_config_schema_image_full }}"
@@ -148,7 +149,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-config-svcmonitor:
     container_name: "opencontrail_config_svcmonitor"
     image: "{{ opencontrail_controller_config_svcmonitor_image_full }}"
@@ -160,7 +161,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
 
   # WebUI services
   opencontrail-webui-web:
@@ -174,7 +175,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-webui-job:
     container_name: "opencontrail_webui_job"
     image: "{{ opencontrail_controller_webui_job_image_full }}"
@@ -186,7 +187,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_config:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
 
   # Control services
   opencontrail-control-nodemgr:
@@ -203,7 +204,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_control:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-control-control:
     container_name: "opencontrail_control_control"
     image: "{{ opencontrail_controller_control_control_image_full }}"
@@ -215,7 +216,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_control:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-control-named:
     container_name: "opencontrail_control_named"
     image: "{{ opencontrail_controller_control_named_image_full }}"
@@ -228,7 +229,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_control:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-control-dns:
     container_name: "opencontrail_control_dns"
     image: "{{ opencontrail_controller_control_dns_image_full }}"
@@ -240,7 +241,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_control:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
 
   # Analytics DB services
   opencontrail-analyticsdb-nodemgr:
@@ -257,7 +258,8 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analyticsdb:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
+      - "analyticsdb_cassandra_logs:/var/log/cassandra"
   opencontrail-analyticsdb-kafka:
     container_name: "opencontrail_analyticsdb_kafka"
     image: "{{ opencontrail_external_kafka_image_full }}"
@@ -273,7 +275,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analyticsdb:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "analyticsdb_kafka_logs:/var/log/kafka"
   opencontrail-analyticsdb-zookeeper:
     container_name: "opencontrail_analyticsdb_zookeeper"
     image: "{{ opencontrail_external_zookeeper_image_full }}"
@@ -289,7 +291,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analyticsdb:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "analyticsdb_zookeeper_logs:/var/log/zookeeper"
   opencontrail-analyticsdb-cassandra:
     container_name: "opencontrail_analyticsdb_cassandra"
     image: "{{ opencontrail_external_cassandra_image_full }}"
@@ -310,7 +312,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analyticsdb:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "analyticsdb_cassandra_logs:/var/log/cassandra"
 
   # Analytics services
   opencontrail-analytics-nodemgr:
@@ -327,7 +329,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-analytics-api:
     container_name: "opencontrail_analytics_api"
     image: "{{ opencontrail_analytics_api_image_full }}"
@@ -339,7 +341,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-analytics-collector:
     container_name: "opencontrail_analytics_collector"
     image: "{{ opencontrail_analytics_collector_image_full }}"
@@ -351,7 +353,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-analytics-query-engine:
     container_name: "opencontrail_analytics_query_engine"
     image: "{{ opencontrail_analytics_query_engine_image_full }}"
@@ -363,7 +365,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-analytics-alarm-gen:
     container_name: "opencontrail_analytics_alarm_gen"
     image: "{{ opencontrail_analytics_alarm_gen_image_full }}"
@@ -375,7 +377,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-analytics-snmp-collector:
     container_name: "opencontrail_analytics_snmp_collector"
     image: "{{ opencontrail_analytics_snmp_collector_image_full }}"
@@ -387,7 +389,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-analytics-topology:
     container_name: "opencontrail_analytics_topology"
     image: "{{ opencontrail_analytics_topology_image_full }}"
@@ -399,7 +401,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   redis:
     container_name: "redis"
     image: "{{ redis_image_full }}"
@@ -413,8 +415,6 @@ opencontrail_services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
-      - "/var/crashes/opencontrail_analytics:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
 
   # VRouter services
   opencontrail-agent-vrouter-nodemgr:
@@ -432,7 +432,7 @@ opencontrail_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/var/crashes/opencontrail_agent_vrouter:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
   opencontrail-agent-vrouter:
     container_name: "opencontrail_agent_vrouter"
     image: "{{ opencontrail_agent_vrouter_image_full }}"
@@ -447,7 +447,7 @@ opencontrail_services:
       - "/lib/modules:/lib/modules:ro"
       - "/usr/src:/usr/src:ro"
       - "/var/crashes/opencontrail_agent_vrouter:/var/crashes:shared"
-      - "/var/log:/var/log:shared"
+      - "contrail_logs:/var/log/contrail"
 
 opencontrail_init_services:
   nova-compute-opencontrail-init:
