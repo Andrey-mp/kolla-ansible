@@ -56,6 +56,10 @@ vrouter_env:
   ANALYTICS_NODES: "{{ analytics_nodes }}"
   PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
   VROUTER_GATEWAY: "{{ opencontrail_vrouter_gateway }}"
+nodemgr_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  ANALYTICS_NODES: "{{ analytics_nodes }}"
+  AAA_MODE: "{{ opencontrail_aaa_mode }}"
 
 opencontrail_services:
   # Config database services
@@ -104,10 +108,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      NODE_TYPE: "config"
+    environment: "{{ { 'NODE_TYPE': 'config' } | combine(nodemgr_env) | combine(auth_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -196,10 +197,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment:
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      CLOUD_ORCHESTRATOR: "openstack"
-      NODE_TYPE: "control"
+    environment: "{{ { 'NODE_TYPE': 'control' } | combine(nodemgr_env) | combine(auth_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -250,10 +248,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      NODE_TYPE: "database"
+    environment: "{{ { 'NODE_TYPE': 'database' } | combine(nodemgr_env) | combine(auth_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -321,10 +316,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment:
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
-      CLOUD_ORCHESTRATOR: "openstack"
-      NODE_TYPE: "analytics"
+    environment: "{{ { 'NODE_TYPE': 'analytics' } | combine(nodemgr_env) | combine(auth_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -423,11 +415,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      AAA_MODE: "{{ opencontrail_aaa_mode }}"
-      NODE_TYPE: "vrouter"
-      ANALYTICS_NODES: "{{ analytics_nodes }}"
+    environment: "{{ { 'NODE_TYPE': 'vrouter' } | combine(nodemgr_env) | combine(auth_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
