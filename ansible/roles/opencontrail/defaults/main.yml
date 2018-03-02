@@ -40,6 +40,7 @@ control_env:
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
   CONFIGDB_NODES: "{{ configdb_nodes }}"
   CONFIG_NODES: "{{ config_nodes }}"
+  CONTROL_NODES: "{{ control_nodes }}"
 analytics_env:
   CLOUD_ORCHESTRATOR: "openstack"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
@@ -58,8 +59,11 @@ vrouter_env:
   VROUTER_GATEWAY: "{{ opencontrail_vrouter_gateway }}"
 nodemgr_env:
   CLOUD_ORCHESTRATOR: "openstack"
-  ANALYTICS_NODES: "{{ analytics_nodes }}"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
+  CONFIG_NODES: "{{ config_nodes }}"
+  CONTROL_NODES: "{{ control_nodes }}"
+  ANALYTICS_NODES: "{{ analytics_nodes }}"
+  ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
 
 opencontrail_services:
   # Config database services
