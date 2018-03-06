@@ -9,7 +9,7 @@
     - "opencontrail_control"
     - "opencontrail_analyticsdb"
     - "opencontrail_analytics"
-    - "opencontrail_agent_vrouter"
+    - "opencontrail_vrouter_agent"
 
 - name: Setting crashes sysctl values
   become: true

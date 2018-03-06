@@ -1,20 +1,20 @@
 ---
 - name: Running Vrouter module build & insert it into kernel
   vars:
-    agent_build_driver_init: "{{ opencontrail_init_services['opencontrail-agent-build-driver-init'] }}"
+    vrouter_kernel_build_init: "{{ opencontrail_init_services['opencontrail-vrouter-kernel-build-init'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
     detach: False
-    image: "{{ agent_build_driver_init.image }}"
+    image: "{{ vrouter_kernel_build_init.image }}"
     privileged: "True"
     labels:
       BOOTSTRAP:
-    name: "opencontrail_agent_build_driver_init"
+    name: "opencontrail_vrouter_kernel_build_init"
     restart_policy: "never"
-    volumes: "{{ agent_build_driver_init.volumes }}"
+    volumes: "{{ vrouter_kernel_build_init.volumes }}"
   when:
-    - agent_build_driver_init.enabled | bool
+    - vrouter_kernel_build_init.enabled | bool
     - neutron_plugin_agent == 'opencontrail'
     - inventory_hostname in groups['compute']
   run_once: True
@@ -22,23 +22,23 @@
 
 - name: Running Vrouter module build & insert it into kernel
   vars:
-    agent_vrouter: "{{ opencontrail_services['opencontrail-agent-vrouter'] }}"
-    agent_vrouter_init: "{{ opencontrail_init_services['opencontrail-agent-vrouter-init-kernel'] }}"
+    vrouter_agent: "{{ opencontrail_services['opencontrail-vrouter-agent'] }}"
+    vrouter_kernel_init: "{{ opencontrail_init_services['opencontrail-vrouter-kernel-init'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
     detach: False
-    image: "{{ agent_vrouter_init.image }}"
-    environment: "{{ agent_vrouter.environment }}"
-    privileged: "{{ agent_vrouter.privileged }}"
+    image: "{{ vrouter_kernel_init.image }}"
+    environment: "{{ vrouter_agent.environment }}"
+    privileged: "{{ vrouter_agent.privileged }}"
     labels:
       BOOTSTRAP:
-    name: "opencontrail_vrouter_agent_init"
+    name: "opencontrail_vrouter_kernel_init"
     pid_mode: "host"
     restart_policy: "never"
-    volumes: "{{ agent_vrouter.volumes }}"
+    volumes: "{{ vrouter_agent.volumes }}"
   when:
-    - agent_vrouter.enabled | bool
+    - vrouter_agent.enabled | bool
     - neutron_plugin_agent == 'opencontrail'
     - inventory_hostname in groups['compute']
   run_once: True
