@@ -3,7 +3,7 @@
   vars:
     service_name: "opencontrail-agent-vrouter-nodemgr"
     service: "{{ opencontrail_services[service_name] }}"
-    opencontrail_agent_vrouter_nodemgr_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+    opencontrail_vrouter_agent_nodemgr_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
   kolla_docker:
     action: "recreate_or_restart_container"
     common_options: "{{ docker_common_options }}"
@@ -15,12 +15,12 @@
     - action != "config"
     - service.enabled | bool
     - service.host_in_groups | bool
-    - opencontrail_agent_vrouter_nodemgr_container | changed
+    - opencontrail_vrouter_agent_nodemgr_container | changed
 - name: Restart opencontrail-agent-vrouter container
   vars:
     service_name: "opencontrail-agent-vrouter"
     service: "{{ opencontrail_services[service_name] }}"
-    opencontrail_agent_vrouter_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
+    opencontrail_vrouter_agent_container: "{{ check_opencontrail_containers.results|selectattr('item.key', 'equalto', service_name)|first }}"
   kolla_docker:
     action: "recreate_or_restart_container"
     common_options: "{{ docker_common_options }}"
@@ -33,4 +33,4 @@
     - action != "config"
     - service.enabled | bool
     - service.host_in_groups | bool
-    - opencontrail_agent_vrouter_container | changed
+    - opencontrail_vrouter_agent_container | changed

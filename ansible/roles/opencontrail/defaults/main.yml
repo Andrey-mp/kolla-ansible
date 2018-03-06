@@ -414,7 +414,7 @@ opencontrail_services:
 
   # VRouter services
   opencontrail-agent-vrouter-nodemgr:
-    container_name: "opencontrail_agent_vrouter_nodemgr"
+    container_name: "opencontrail_vrouter_agent_nodemgr"
     image: "{{ opencontrail_nodemgr_image_full }}"
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
@@ -427,7 +427,7 @@ opencontrail_services:
       - "contrail_logs:/var/log/contrail"
   opencontrail-agent-vrouter:
     container_name: "opencontrail_agent_vrouter"
-    image: "{{ opencontrail_agent_vrouter_image_full }}"
+    image: "{{ opencontrail_vrouter_agent_image_full }}"
     privileged: True
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
@@ -455,31 +455,31 @@ opencontrail_init_services:
     enabled: "{{ enable_heat | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['heat-api'] }}"
   opencontrail-agent-build-driver-init:
-    image: "{{ opencontrail_agent_build_driver_init_image_full }}"
+    image: "{{ opencontrail_vrouter_kernel_build_init_image_full }}"
     enabled: "{{ enable_opencontrail | bool and hostvars[inventory_hostname]['ansible_distribution'] == 'Ubuntu' and hostvars[inventory_hostname]['ansible_distribution_release'] == 'xenial' }}"
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
     volumes:
       - "/lib/modules:/lib/modules"
       - "/usr/src:/usr/src"
   opencontrail-agent-vrouter-init-kernel:
-    image: "{{ opencontrail_agent_vrouter_init_kernel_image_full }}"
+    image: "{{ opencontrail_vrouter_kernel_init_image_full }}"
     enabled: "{{ enable_opencontrail | bool }}"
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
 
 ####################
 # Docker
 ####################
-opencontrail_agent_vrouter_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-agent-vrouter"
-opencontrail_agent_vrouter_tag: "{{ opencontrail_tag }}"
-opencontrail_agent_vrouter_image_full: "{{ opencontrail_agent_vrouter_image }}:{{ opencontrail_agent_vrouter_tag }}"
+opencontrail_vrouter_agent_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-vrouter-agent"
+opencontrail_vrouter_agent_tag: "{{ opencontrail_tag }}"
+opencontrail_vrouter_agent_image_full: "{{ opencontrail_vrouter_agent_image }}:{{ opencontrail_vrouter_agent_tag }}"
 
-opencontrail_agent_build_driver_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-agent-build-driver-init"
-opencontrail_agent_build_driver_init_tag: "{{ opencontrail_ubuntu_specific_tag }}"
-opencontrail_agent_build_driver_init_image_full: "{{ opencontrail_agent_build_driver_init_image }}:{{ opencontrail_agent_build_driver_init_tag }}"
+opencontrail_vrouter_kernel_build_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-vrouter-kernel-build-init"
+opencontrail_vrouter_kernel_build_init_tag: "{{ opencontrail_ubuntu_specific_tag }}"
+opencontrail_vrouter_kernel_build_init_image_full: "{{ opencontrail_vrouter_kernel_build_init_image }}:{{ opencontrail_vrouter_kernel_build_init_tag }}"
 
-opencontrail_agent_vrouter_init_kernel_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-agent-vrouter-init-kernel"
-opencontrail_agent_vrouter_init_kernel_tag: "{{ opencontrail_tag }}"
-opencontrail_agent_vrouter_init_kernel_image_full: "{{ opencontrail_agent_vrouter_init_kernel_image }}:{{ opencontrail_agent_vrouter_init_kernel_tag }}"
+opencontrail_vrouter_kernel_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-vrouter-kernel-init"
+opencontrail_vrouter_kernel_init_tag: "{{ opencontrail_tag }}"
+opencontrail_vrouter_kernel_init_image_full: "{{ opencontrail_vrouter_kernel_init_image }}:{{ opencontrail_vrouter_kernel_init_tag }}"
 
 opencontrail_analytics_alarm_gen_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-analytics-alarm-gen"
 opencontrail_analytics_alarm_gen_tag: "{{ opencontrail_tag }}"
