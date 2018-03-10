@@ -474,7 +474,7 @@ opencontrail_vrouter_agent_tag: "{{ opencontrail_tag }}"
 opencontrail_vrouter_agent_image_full: "{{ opencontrail_vrouter_agent_image }}:{{ opencontrail_vrouter_agent_tag }}"
 
 opencontrail_vrouter_kernel_build_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-vrouter-kernel-build-init"
-opencontrail_vrouter_kernel_build_init_tag: "{{ opencontrail_ubuntu_specific_tag }}"
+opencontrail_vrouter_kernel_build_init_tag: "{{ opencontrail_tag }}"
 opencontrail_vrouter_kernel_build_init_image_full: "{{ opencontrail_vrouter_kernel_build_init_image }}:{{ opencontrail_vrouter_kernel_build_init_tag }}"
 
 opencontrail_vrouter_kernel_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-vrouter-kernel-init"
