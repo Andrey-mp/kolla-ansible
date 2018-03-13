@@ -106,6 +106,8 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "configdb_zookepeer_logs:/var/log/zookeeper"
+      - "configdb_zookeeper:/data"
+      - "configdb_zookeeper:/datalog"
   opencontrail-configdb-cassandra:
     container_name: "opencontrail_configdb_cassandra"
     image: "{{ opencontrail_external_cassandra_image_full }}"
@@ -120,6 +122,7 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "configdb_cassandra_logs:/var/log/cassandra"
+      - "configdb_cassandra_data:/var/lib/cassandra/data"
 
   # Config API services
   opencontrail-config-nodemgr:
@@ -134,7 +137,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "configdb_cassandra_logs:/var/log/cassandra"
       - "etc_contrail_config:/etc/contrail"
   opencontrail-config-api:
     container_name: "opencontrail_config_api"
@@ -285,7 +287,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analyticsdb:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "analyticsdb_cassandra_logs:/var/log/cassandra"
       - "etc_contrail_analyticsdb:/etc/contrail"
   opencontrail-analyticsdb-kafka:
     container_name: "opencontrail_analyticsdb_kafka"
@@ -323,6 +324,8 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analyticsdb:/var/crashes:shared"
       - "analyticsdb_zookeeper_logs:/var/log/zookeeper"
+      - "analyticsdb_zookeeper:/data"
+      - "analyticsdb_zookeeper:/datalog"
   opencontrail-analyticsdb-cassandra:
     container_name: "opencontrail_analyticsdb_cassandra"
     image: "{{ opencontrail_external_cassandra_image_full }}"
@@ -337,6 +340,7 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analyticsdb:/var/crashes:shared"
       - "analyticsdb_cassandra_logs:/var/log/cassandra"
+      - "analyticsdb_cassandra_data:/var/lib/cassandra/data"
 
   # Analytics services
   opencontrail-analytics-nodemgr:
