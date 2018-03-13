@@ -99,6 +99,8 @@ opencontrail_services:
       ZOOKEEPER_NODES: "{{ configdb_nodes }}"
       ZOOKEEPER_PORTS: "2888:3888"
       ZOOKEEPER_PORT: "2181"
+    labels:
+      - net.juniper.contrail.pod=config-database
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -111,6 +113,8 @@ opencontrail_services:
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-configdb'] }}"
     environment: "{{ configdb_env }}"
+    labels:
+      - net.juniper.contrail.pod=config-database
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -294,6 +298,8 @@ opencontrail_services:
       KAFKA_NODES: "{{ analyticsdb_nodes }}"
       ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
       ZOOKEEPER_PORT: "2182"
+    labels:
+      - net.juniper.contrail.pod=analytics-database
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -310,6 +316,8 @@ opencontrail_services:
       ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
       ZOOKEEPER_PORTS: "4888:5888"
       ZOOKEEPER_PORT: "2182"
+    labels:
+      - net.juniper.contrail.pod=analytics-database
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -322,6 +330,8 @@ opencontrail_services:
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
     environment: "{{ analyticsdb_env }}"
+    labels:
+      - net.juniper.contrail.pod=analytics-database
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
