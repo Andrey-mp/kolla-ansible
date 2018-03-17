@@ -57,6 +57,7 @@ vrouter_env:
   ANALYTICS_NODES: "{{ analytics_nodes }}"
   PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
   VROUTER_GATEWAY: "{{ opencontrail_vrouter_gateway }}"
+  METADATA_PROXY_SECRET: "{{ metadata_secret }}"
 nodemgr_env:
   CLOUD_ORCHESTRATOR: "openstack"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
