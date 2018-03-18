@@ -36,7 +36,7 @@
     name: "opencontrail_vrouter_kernel_init"
     pid_mode: "host"
     restart_policy: "never"
-    volumes: "{{ vrouter_agent.volumes }}"
+    volumes: "{{ vrouter_kernel_init.volumes }}"
   when:
     - vrouter_agent.enabled | bool
     - neutron_plugin_agent == 'opencontrail'
