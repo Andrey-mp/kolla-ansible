@@ -72,6 +72,8 @@ nodemgr_env:
   CONTROL_NODES: "{{ control_nodes }}"
   ANALYTICS_NODES: "{{ analytics_nodes }}"
   ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
+  CONFIG_NODEMGR__DEFAULTS__minimum_diskGB: "2"
+  DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: "2"
 configdb_env:
   CLOUD_ORCHESTRATOR: "openstack"
   CASSANDRA_SEEDS: "{{ configdb_nodes }}"
