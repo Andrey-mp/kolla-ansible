@@ -58,6 +58,13 @@ vrouter_env:
   PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
   VROUTER_GATEWAY: "{{ opencontrail_vrouter_gateway }}"
   METADATA_PROXY_SECRET: "{{ metadata_secret }}"
+  VROUTER_AGENT__RESTART__backup_idle_timeout: "10000"
+  VROUTER_AGENT__RESTART__backup_dir: "/var/lib/contrail/backup"
+  VROUTER_AGENT__RESTART__backup_file_count: "3"
+  VROUTER_AGENT__RESTART__backup_enable: "false"
+  VROUTER_AGENT__RESTART__restore_enable: "false"
+  VROUTER_AGENT__RESTART__restore_audit_timeout: "15000"
+  VROUTER_AGENT__FLOWS__thread_count: "2"
 nodemgr_env:
   CLOUD_ORCHESTRATOR: "openstack"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
