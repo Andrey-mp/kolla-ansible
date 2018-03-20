@@ -22,6 +22,10 @@ num_engine_workers = {{ openstack_service_workers }}
 
 transport_url = {{ rpc_transport_url }}
 
+{% if neutron_plugin_agent == 'opencontrail' %}
+plugin_dirs = /opt/plugin/site-packages/vnc_api/gen/heat/resources,/opt/plugin/site-packages/contrail_heat/resources
+{% endif %}
+
 {% if service_name == 'heat-api' %}
 [heat_api]
 bind_host = {{ api_interface_address }}
@@ -108,4 +112,15 @@ hmac_keys = {{ osprofiler_secret }}
 {% if enable_elasticsearch | bool %}
 connection_string = elasticsearch://{{ elasticsearch_address }}:{{ elasticsearch_port }}
 {% endif %}
+{% endif %}
+
+{% if neutron_plugin_agent == 'opencontrail' %}
+[clients_contrail]
+api_server = {{ opencontrail_api_server_ip }}
+api_port = {{ opencontrail_api_server_port }}
+auth_host_ip = {{ kolla_internal_fqdn }}
+auth_protocol = {{ internal_protocol }}
+password = {{ openstack_auth['password'] }}
+tenant = {{ openstack_auth['project_name'] }}
+user = {{ openstack_auth['username'] }}
 {% endif %}
