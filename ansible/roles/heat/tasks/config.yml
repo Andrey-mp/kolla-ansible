@@ -101,6 +101,7 @@
     name: "{{ item.value.container_name }}"
     image: "{{ item.value.image }}"
     volumes: "{{ item.value.volumes }}"
+    environment: "{{ item.value.get('environment') }}"
   register: check_heat_containers
   when:
     - action != "config"

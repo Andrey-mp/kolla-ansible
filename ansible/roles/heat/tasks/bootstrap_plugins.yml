@@ -1,7 +1,7 @@
 ---
 - name: Running Heat opencontrail bootstrap container
   vars:
-    heat_api: "{{ heat_services['heat-api'] }}"
+    heat_engine: "{{ heat_services['heat-engine'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
@@ -9,8 +9,8 @@
     image: "{{ opencontrail_openstack_heat_init_image_full }}"
     labels:
       BOOTSTRAP:
-    name: "heat_api_opencontrail_init"
+    name: "heat_engine_opencontrail_init"
     restart_policy: "never"
-    volumes: "{{ heat_api.volumes }}"
+    volumes: "{{ heat_engine.volumes }}"
   run_once: True
-  delegate_to: "{{ groups[heat_api.group][0] }}"
+  delegate_to: "{{ groups[heat_engine.group][0] }}"
