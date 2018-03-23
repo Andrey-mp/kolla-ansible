@@ -20,7 +20,7 @@
   run_once: True
   delegate_to: "{{ groups['compute'][0] }}"
 
-- name: Running Vrouter module build & insert it into kernel
+- name: Running Vrouter kernel init
   vars:
     vrouter_agent: "{{ opencontrail_services['opencontrail-vrouter-agent'] }}"
     vrouter_kernel_init: "{{ opencontrail_init_services['opencontrail-vrouter-kernel-init'] }}"

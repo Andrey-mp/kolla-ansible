@@ -489,6 +489,7 @@ opencontrail_services:
       - "/var/crashes/contrail/vrouter:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
       - "etc_contrail_vrouter:/etc/contrail"
+      - "/etc/sysconfig/network-scripts:/etc/sysconfig/network-scripts"
 
 opencontrail_init_services:
   nova-compute-opencontrail-init:
@@ -513,12 +514,13 @@ opencontrail_init_services:
       - "/bin:/host/bin"
   opencontrail-vrouter-kernel-init:
     image: "{{ opencontrail_vrouter_kernel_init_image_full }}"
-    enabled: "{{ enable_opencontrail | bool }}"
+    enabled: "{{ enable_opencontrail | bool and hostvars[inventory_hostname]['ansible_distribution'] != 'Ubuntu' }}"
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
     volumes:
       - "/lib/modules:/lib/modules"
       - "/usr/src:/usr/src"
       - "/bin:/host/bin"
+      - "/etc/sysconfig/network-scripts:/etc/sysconfig/network-scripts"
 
 ####################
 # Docker
