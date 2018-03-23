@@ -46,7 +46,7 @@
 
 - name: Running contrail-status init
   vars:
-    contrail_status: "{{ opencontrail_services['opencontrail-status'] }}"
+    contrail_status: "{{ opencontrail_init_services['opencontrail-status'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
