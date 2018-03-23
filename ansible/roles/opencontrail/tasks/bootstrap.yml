@@ -57,7 +57,7 @@
     name: "opencontrail_contrail_status_init"
     pid_mode: "host"
     restart_policy: "never"
-    volumes: "{{ contrail_status_init.volumes }}"
+    volumes: "{{ contrail_status.volumes }}"
   when:
     - contrail_status.enabled | bool
     - neutron_plugin_agent == 'opencontrail'

@@ -46,6 +46,7 @@
     privileged: "{{ service.privileged }}"
     volumes: "{{ service.volumes }}"
     environment: "{{ service.environment }}"
+    pid_mode: "host"
   when:
     - action != "config"
     - service.enabled | bool
@@ -63,6 +64,7 @@
     image: "{{ service.image }}"
     volumes: "{{ service.volumes }}"
     environment: "{{ service.environment }}"
+    pid_mode: "host"
   when:
     - action != "config"
     - service.enabled | bool
