@@ -526,7 +526,7 @@ opencontrail_init_services:
     enabled: true
     host_in_groups: "{{ True }}"
     volumes:
-      - "/usr/bin:/usr/bin"
+      - "/usr/bin:/host/usr/bin"
       - "/run:/run:shared"
 
 ####################
