@@ -43,3 +43,22 @@
     - inventory_hostname in groups['compute']
   run_once: True
   delegate_to: "{{ groups['compute'][0] }}"
+
+- name: Running contrail-status init
+  vars:
+    contrail_status: "{{ opencontrail_services['opencontrail-status'] }}"
+  kolla_docker:
+    action: "start_container"
+    common_options: "{{ docker_common_options }}"
+    detach: False
+    image: "{{ contrail_status.image }}"
+    labels:
+      BOOTSTRAP:
+    name: "opencontrail_contrail_status_init"
+    pid_mode: "host"
+    restart_policy: "never"
+    volumes: "{{ contrail_status_init.volumes }}"
+  when:
+    - contrail_status.enabled | bool
+    - neutron_plugin_agent == 'opencontrail'
+  run_once: True
