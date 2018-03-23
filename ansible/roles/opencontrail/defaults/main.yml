@@ -634,7 +634,7 @@ opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_ini
 
 opencontrail_status_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-status"
 opencontrail_status_tag: "{{ opencontrail_tag }}"
-opencontrail_status_image_full: "{{ opencontrail_vrouter_agent_image }}:{{ opencontrail_vrouter_agent_tag }}"
+opencontrail_status_image_full: "{{ opencontrail_status_image }}:{{ opencontrail_status_tag }}"
 
 redis_image: "redis"
 redis_tag: "4.0.2"
