@@ -736,6 +736,7 @@ opencontrail_api_server_ip: "{{ api_interface_address }}"
 opencontrail_api_server_port: "8082"
 opencontrail_aaa_mode: "cloud-admin"
 opencontrail_vrouter_gateway: ""
+opencontrail_log_level: "SYS_DEBUG"
 
 #######################################
 # XenAPI - Support XenAPI for XenServer

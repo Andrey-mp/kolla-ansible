@@ -35,12 +35,14 @@ config_env:
   CONFIGDB_NODES: "{{ configdb_nodes }}"
   ZOOKEEPER_NODES: "{{ configdb_nodes }}"
   CONFIG_NODES: "{{ config_nodes }}"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
 control_env:
   CLOUD_ORCHESTRATOR: "openstack"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
   CONFIGDB_NODES: "{{ configdb_nodes }}"
   CONFIG_NODES: "{{ config_nodes }}"
   CONTROL_NODES: "{{ control_nodes }}"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
 analytics_env:
   CLOUD_ORCHESTRATOR: "openstack"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
@@ -50,6 +52,7 @@ analytics_env:
   ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
   ZOOKEEPER_ANALYTICS_NODES: "{{ analyticsdb_nodes }}"
   KAFKA_NODES: "{{ analyticsdb_nodes }}"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
 vrouter_env:
   CLOUD_ORCHESTRATOR: "openstack"
   AAA_MODE: "{{ opencontrail_aaa_mode }}"
@@ -58,6 +61,7 @@ vrouter_env:
   PHYSICAL_INTERFACE: "{{ neutron_external_interface }}"
   VROUTER_GATEWAY: "{{ opencontrail_vrouter_gateway }}"
   METADATA_PROXY_SECRET: "{{ metadata_secret }}"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
   VROUTER_AGENT__RESTART__backup_idle_timeout: "10000"
   VROUTER_AGENT__RESTART__backup_dir: "/var/lib/contrail/backup"
   VROUTER_AGENT__RESTART__backup_file_count: "3"
@@ -74,6 +78,7 @@ nodemgr_env:
   ANALYTICSDB_NODES: "{{ analyticsdb_nodes }}"
   CONFIG_NODEMGR__DEFAULTS__minimum_diskGB: "2"
   DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: "2"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
 configdb_env:
   CLOUD_ORCHESTRATOR: "openstack"
   CASSANDRA_SEEDS: "{{ configdb_nodes }}"
@@ -84,6 +89,7 @@ configdb_env:
   CASSANDRA_SSL_STORAGE_PORT: "7013"
   CASSANDRA_STORAGE_PORT: "7012"
   CASSANDRA_JMX_LOCAL_PORT: "7201"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
 analyticsdb_env:
   CLOUD_ORCHESTRATOR: "openstack"
   CASSANDRA_SEEDS: "{{ analyticsdb_nodes }}"
@@ -94,6 +100,7 @@ analyticsdb_env:
   CASSANDRA_SSL_STORAGE_PORT: "7011"
   CASSANDRA_STORAGE_PORT: "7010"
   CASSANDRA_JMX_LOCAL_PORT: "7200"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
 
 
 opencontrail_services:
