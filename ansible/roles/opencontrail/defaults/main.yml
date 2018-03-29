@@ -154,7 +154,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_config:/etc/contrail"
   opencontrail-config-api:
     container_name: "opencontrail_config_api"
     image: "{{ opencontrail_controller_config_api_image_full }}"
@@ -167,7 +166,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_config:/etc/contrail"
   opencontrail-config-devicemgr:
     container_name: "opencontrail_config_devicemgr"
     image: "{{ opencontrail_controller_config_devicemgr_image_full }}"
@@ -180,7 +178,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_config:/etc/contrail"
   opencontrail-config-schema:
     container_name: "opencontrail_config_schema"
     image: "{{ opencontrail_controller_config_schema_image_full }}"
@@ -193,7 +190,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_config:/etc/contrail"
   opencontrail-config-svcmonitor:
     container_name: "opencontrail_config_svcmonitor"
     image: "{{ opencontrail_controller_config_svcmonitor_image_full }}"
@@ -206,7 +202,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/config:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_config:/etc/contrail"
 
   # WebUI services
   opencontrail-webui-web:
@@ -221,7 +216,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/webui:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_webui:/etc/contrail"
   opencontrail-webui-job:
     container_name: "opencontrail_webui_job"
     image: "{{ opencontrail_controller_webui_job_image_full }}"
@@ -234,7 +228,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/webui:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_webui:/etc/contrail"
 
   # Control services
   opencontrail-control-nodemgr:
@@ -249,7 +242,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/control:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_control:/etc/contrail"
   opencontrail-control-control:
     container_name: "opencontrail_control_control"
     image: "{{ opencontrail_controller_control_control_image_full }}"
@@ -262,7 +254,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/control:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_control:/etc/contrail"
   opencontrail-control-named:
     container_name: "opencontrail_control_named"
     image: "{{ opencontrail_controller_control_named_image_full }}"
@@ -276,7 +267,7 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/control:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_control:/etc/contrail"
+      - "etc_contrail_control_dns:/etc/contrail"
   opencontrail-control-dns:
     container_name: "opencontrail_control_dns"
     image: "{{ opencontrail_controller_control_dns_image_full }}"
@@ -289,7 +280,7 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/control:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_control:/etc/contrail"
+      - "etc_contrail_control_dns:/etc/contrail"
 
   # Analytics DB services
   opencontrail-analyticsdb-nodemgr:
@@ -304,7 +295,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analyticsdb:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analyticsdb:/etc/contrail"
   opencontrail-analyticsdb-kafka:
     container_name: "opencontrail_analyticsdb_kafka"
     image: "{{ opencontrail_external_kafka_image_full }}"
@@ -372,7 +362,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   opencontrail-analytics-api:
     container_name: "opencontrail_analytics_api"
     image: "{{ opencontrail_analytics_api_image_full }}"
@@ -385,7 +374,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   opencontrail-analytics-collector:
     container_name: "opencontrail_analytics_collector"
     image: "{{ opencontrail_analytics_collector_image_full }}"
@@ -398,7 +386,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   opencontrail-analytics-query-engine:
     container_name: "opencontrail_analytics_query_engine"
     image: "{{ opencontrail_analytics_query_engine_image_full }}"
@@ -411,7 +398,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   opencontrail-analytics-alarm-gen:
     container_name: "opencontrail_analytics_alarm_gen"
     image: "{{ opencontrail_analytics_alarm_gen_image_full }}"
@@ -424,7 +410,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   opencontrail-analytics-snmp-collector:
     container_name: "opencontrail_analytics_snmp_collector"
     image: "{{ opencontrail_analytics_snmp_collector_image_full }}"
@@ -437,7 +422,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   opencontrail-analytics-topology:
     container_name: "opencontrail_analytics_topology"
     image: "{{ opencontrail_analytics_topology_image_full }}"
@@ -450,7 +434,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/analytics:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_analytics:/etc/contrail"
   redis:
     container_name: "redis"
     image: "{{ redis_image_full }}"
@@ -478,7 +461,6 @@ opencontrail_services:
       - "/run:/run:shared"
       - "/var/crashes/contrail/vrouter:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_vrouter:/etc/contrail"
   opencontrail-vrouter-agent:
     container_name: "opencontrail_vrouter_agent"
     image: "{{ opencontrail_vrouter_agent_image_full }}"
@@ -495,7 +477,6 @@ opencontrail_services:
       - "/bin:/host/bin"
       - "/var/crashes/contrail/vrouter:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
-      - "etc_contrail_vrouter:/etc/contrail"
       - "/etc/sysconfig/network-scripts:/etc/sysconfig/network-scripts"
 
 opencontrail_init_services:
