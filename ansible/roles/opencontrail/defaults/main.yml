@@ -504,13 +504,14 @@ opencontrail_init_services:
       - "/usr/src:/usr/src"
       - "/bin:/host/bin"
       - "/etc/sysconfig/network-scripts:/etc/sysconfig/network-scripts"
-  opencontrail-status:
-    image: "{{ opencontrail_status_image_full }}"
+  opencontrail-node-init:
+    image: "{{ opencontrail_node_init_image_full }}"
     enabled: true
     host_in_groups: "{{ True }}"
+    environment:
+      CONTRAIL_STATUS_IMAGE: "{{ opencontrail_status_image_full }}"
     volumes:
       - "/usr/bin:/host/usr/bin"
-      - "/run:/run:shared"
 
 ####################
 # Docker
@@ -618,6 +619,10 @@ opencontrail_openstack_heat_init_image_full: "{{ opencontrail_openstack_heat_ini
 opencontrail_status_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-status"
 opencontrail_status_tag: "{{ opencontrail_tag }}"
 opencontrail_status_image_full: "{{ opencontrail_status_image }}:{{ opencontrail_status_tag }}"
+
+opencontrail_node_init_image: "{{ opencontrail_docker_registry ~ '/' if opencontrail_docker_registry else '' }}{{ opencontrail_docker_namespace ~ '/' if opencontrail_docker_namespace else '' }}contrail-node-init"
+opencontrail_node_init_tag: "{{ opencontrail_tag }}"
+opencontrail_node_init_image_full: "{{ opencontrail_node_init_image }}:{{ opencontrail_node_init_tag }}"
 
 redis_image: "redis"
 redis_tag: "4.0.2"

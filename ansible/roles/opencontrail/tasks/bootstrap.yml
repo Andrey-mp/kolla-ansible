@@ -44,21 +44,22 @@
   run_once: True
   delegate_to: "{{ groups['compute'][0] }}"
 
-- name: Running contrail-status init
+- name: Running node init image
   vars:
-    contrail_status: "{{ opencontrail_init_services['opencontrail-status'] }}"
+    contrail_node_init: "{{ opencontrail_init_services['opencontrail-node-init'] }}"
   kolla_docker:
     action: "start_container"
     common_options: "{{ docker_common_options }}"
     detach: False
-    image: "{{ contrail_status.image }}"
+    image: "{{ contrail_node_init.image }}"
+    privileged: "True"
     labels:
       BOOTSTRAP:
-    name: "opencontrail_contrail_status_init"
+    name: "opencontrail_node_init"
     pid_mode: "host"
     restart_policy: "never"
-    volumes: "{{ contrail_status.volumes }}"
+    volumes: "{{ contrail_node_init.volumes }}"
   when:
-    - contrail_status.enabled | bool
+    - contrail_node_init.enabled | bool
     - neutron_plugin_agent == 'opencontrail'
   run_once: True
