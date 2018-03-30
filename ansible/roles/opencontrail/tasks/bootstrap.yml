@@ -52,6 +52,7 @@
     common_options: "{{ docker_common_options }}"
     detach: False
     image: "{{ contrail_node_init.image }}"
+    environment: "{{ contrail_node_init.environment }}"
     privileged: "True"
     labels:
       BOOTSTRAP:
