@@ -36,8 +36,6 @@ heat_services:
       - "kolla_logs:/var/log/kolla/"
       - "opt_plugin:/opt/plugin/"
 
-#      - ":/usr/lib/python2.7/site-packages/contrail-plugin.pth:ro"
-
 ####################
 # Database
 ####################
