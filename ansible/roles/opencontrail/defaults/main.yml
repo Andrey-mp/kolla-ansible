@@ -476,6 +476,7 @@ opencontrail_services:
       - "/var/crashes:/var/crashes:shared"
       - "contrail_logs:/var/log/contrail"
       - "/etc/sysconfig/network-scripts:/etc/sysconfig/network-scripts"
+      - "/dev/log:/dev/log"
 
 opencontrail_init_services:
   nova-compute-opencontrail-init:
