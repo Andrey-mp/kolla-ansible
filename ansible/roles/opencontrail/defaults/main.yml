@@ -443,7 +443,7 @@ opencontrail_services:
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] or inventory_hostname in groups['opencontrail-webui'] }}"
     labels:
       REDIS:
-    environment:"{{ { 'CLOUD_ORCHESTRATOR': 'openstack' } | combine(opencontrail_env) }}"
+    environment: "{{ { 'CLOUD_ORCHESTRATOR': 'openstack' } | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
