@@ -13,6 +13,48 @@ rabbitmq_env:
   RABBITMQ_NODE_PORT: "{{ rabbitmq_port }}"
   RABBITMQ_USER: "{{ rabbitmq_user }}"
   RABBITMQ_PASSWORD: "{{ rabbitmq_password }}"
+configdb_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  CASSANDRA_SEEDS: "{{ configdb_nodes }}"
+  CASSANDRA_START_RPC: "true"
+  CASSANDRA_CLUSTER_NAME: "contrail_database"
+  CASSANDRA_PORT: "9161"
+  CASSANDRA_CQL_PORT: "9041"
+  CASSANDRA_SSL_STORAGE_PORT: "7013"
+  CASSANDRA_STORAGE_PORT: "7012"
+  CASSANDRA_JMX_LOCAL_PORT: "7201"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
+  NODE_TYPE: "config"
+analyticsdb_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  CASSANDRA_SEEDS: "{{ analyticsdb_nodes }}"
+  CASSANDRA_START_RPC: "true"
+  CASSANDRA_CLUSTER_NAME: "contrail_analytics"
+  CASSANDRA_PORT: "9160"
+  CASSANDRA_CQL_PORT: "9042"
+  CASSANDRA_SSL_STORAGE_PORT: "7011"
+  CASSANDRA_STORAGE_PORT: "7010"
+  CASSANDRA_JMX_LOCAL_PORT: "7200"
+  LOG_LEVEL: "{{ opencontrail_log_level }}"
+  NODE_TYPE: "database"
+configzoo_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  ZOOKEEPER_NODES: "{{ configdb_nodes }}"
+  ZOOKEEPER_PORTS: "2888:3888"
+  ZOOKEEPER_PORT: "2181"
+  NODE_TYPE: "config"
+analyticskafka_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  KAFKA_NODES: "{{ analyticsdb_nodes }}"
+  ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
+  ZOOKEEPER_PORT: "2182"
+  NODE_TYPE: "database"
+analyticszoo_env:
+  CLOUD_ORCHESTRATOR: "openstack"
+  ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
+  ZOOKEEPER_PORTS: "4888:5888"
+  ZOOKEEPER_PORT: "2182"
+  NODE_TYPE: "database"
 
 ssl_env:
   SSL_ENABLE: "{{ opencontrail_ssl }}"
@@ -82,30 +124,6 @@ nodemgr_env:
   CONFIG_NODEMGR__DEFAULTS__minimum_diskGB: "2"
   DATABASE_NODEMGR__DEFAULTS__minimum_diskGB: "2"
   LOG_LEVEL: "{{ opencontrail_log_level }}"
-configdb_env:
-  CLOUD_ORCHESTRATOR: "openstack"
-  CASSANDRA_SEEDS: "{{ configdb_nodes }}"
-  CASSANDRA_START_RPC: "true"
-  CASSANDRA_CLUSTER_NAME: "contrail_database"
-  CASSANDRA_PORT: "9161"
-  CASSANDRA_CQL_PORT: "9041"
-  CASSANDRA_SSL_STORAGE_PORT: "7013"
-  CASSANDRA_STORAGE_PORT: "7012"
-  CASSANDRA_JMX_LOCAL_PORT: "7201"
-  LOG_LEVEL: "{{ opencontrail_log_level }}"
-  NODE_TYPE: "config"
-analyticsdb_env:
-  CLOUD_ORCHESTRATOR: "openstack"
-  CASSANDRA_SEEDS: "{{ analyticsdb_nodes }}"
-  CASSANDRA_START_RPC: "true"
-  CASSANDRA_CLUSTER_NAME: "contrail_analytics"
-  CASSANDRA_PORT: "9160"
-  CASSANDRA_CQL_PORT: "9042"
-  CASSANDRA_SSL_STORAGE_PORT: "7011"
-  CASSANDRA_STORAGE_PORT: "7010"
-  CASSANDRA_JMX_LOCAL_PORT: "7200"
-  LOG_LEVEL: "{{ opencontrail_log_level }}"
-  NODE_TYPE: "database"
 
 
 opencontrail_services:
@@ -116,12 +134,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-configdb'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      ZOOKEEPER_NODES: "{{ configdb_nodes }}"
-      ZOOKEEPER_PORTS: "2888:3888"
-      ZOOKEEPER_PORT: "2181"
-      NODE_TYPE: "config"
+    environment: "{{ configzoo_env | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -135,7 +148,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-configdb'] }}"
-    environment: "{{ configdb_env }}"
+    environment: "{{ configdb_env | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -150,7 +163,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ { 'NODE_TYPE': 'config' } | combine(configdb_env) | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ { 'NODE_TYPE': 'config' } | combine(configdb_env) | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -162,7 +175,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -174,7 +187,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -186,7 +199,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -198,7 +211,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-config'] }}"
-    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -212,7 +225,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-webui'] }}"
-    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -224,7 +237,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-webui'] }}"
-    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ config_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -238,7 +251,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment: "{{ { 'NODE_TYPE': 'control' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ { 'NODE_TYPE': 'control' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -250,7 +263,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment: "{{ control_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ control_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -263,7 +276,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment: "{{ control_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ control_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -276,7 +289,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-control'] }}"
-    environment: "{{ control_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ control_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -291,7 +304,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
-    environment: "{{ { 'NODE_TYPE': 'database' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ { 'NODE_TYPE': 'database' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -303,12 +316,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      KAFKA_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_PORT: "2182"
-      NODE_TYPE: "database"
+    environment: "{{ analyticskafka_env | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -320,12 +328,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
-      ZOOKEEPER_NODES: "{{ analyticsdb_nodes }}"
-      ZOOKEEPER_PORTS: "4888:5888"
-      ZOOKEEPER_PORT: "2182"
-      NODE_TYPE: "database"
+    environment: "{{ analyticskafka_env | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -339,7 +342,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analyticsdb'] }}"
-    environment: "{{ analyticsdb_env }}"
+    environment: "{{ analyticsdb_env | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -354,7 +357,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ { 'NODE_TYPE': 'analytics' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ { 'NODE_TYPE': 'analytics' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -366,7 +369,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -378,7 +381,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -390,7 +393,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -402,7 +405,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -414,7 +417,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -426,7 +429,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] }}"
-    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ analytics_env | combine(rabbitmq_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -440,8 +443,7 @@ opencontrail_services:
     host_in_groups: "{{ inventory_hostname in groups['opencontrail-analytics'] or inventory_hostname in groups['opencontrail-webui'] }}"
     labels:
       REDIS:
-    environment:
-      CLOUD_ORCHESTRATOR: "openstack"
+    environment:"{{ { 'CLOUD_ORCHESTRATOR': 'openstack' } | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -453,7 +455,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
-    environment: "{{ { 'NODE_TYPE': 'vrouter' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ { 'NODE_TYPE': 'vrouter' } | combine(nodemgr_env) | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -466,7 +468,7 @@ opencontrail_services:
     enabled: "{{ enable_opencontrail }}"
     group: opencontrail
     host_in_groups: "{{ inventory_hostname in groups['compute'] }}"
-    environment: "{{ vrouter_env | combine(auth_env) | combine(ssl_env) }}"
+    environment: "{{ vrouter_env | combine(auth_env) | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
@@ -512,7 +514,7 @@ opencontrail_init_services:
     image: "{{ opencontrail_node_init_image_full }}"
     enabled: true
     host_in_groups: "{{ True }}"
-    environment: "{{ { 'CONTRAIL_STATUS_IMAGE': opencontrail_status_image_full } | combine(ssl_env) }}"
+    environment: "{{ { 'CONTRAIL_STATUS_IMAGE': opencontrail_status_image_full } | combine(ssl_env) | combine(opencontrail_env) }}"
     volumes:
       - "/usr/bin:/host/usr/bin"
 

@@ -738,6 +738,11 @@ opencontrail_aaa_mode: "cloud-admin"
 opencontrail_vrouter_gateway: ""
 opencontrail_log_level: "SYS_DEBUG"
 opencontrail_ssl: "False"
+# here additional env can be passed as a dict like this:
+# opencontrail_env:
+#   JVM_EXTRA_OPTS: "-Xms1g -Xmx2g"
+#   CONTROL_DATA_NET_LIST: 10.0.0.0/24,10.1.0.0/24
+opencontrail_env:
 
 #######################################
 # XenAPI - Support XenAPI for XenServer

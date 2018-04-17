@@ -102,6 +102,9 @@ Please change {{contrail_docker_registry}} to URL of your docker registry.
   enable_neutron_agent_ha: "no"
   enable_neutron_vpnaas: "no"
   enable_neutron_sfc: "no"
+  # here additional env can be passed as a dict like this:
+  opencontrail_env:
+    JVM_EXTRA_OPTS: "-Xms1g -Xmx2g"
 
 Run kolla-ansible
 ----------------
