@@ -55,6 +55,13 @@
   notify:
     - "Restart {{ item.key }} container"
 
+- name: Set XenAPI facts
+  set_fact:
+    xenapi_facts: "{{ lookup('file', xenapi_facts_root + '/' + inventory_hostname + '/' + xenapi_facts_file) | from_json }}"
+  when:
+    - nova_compute_virt_type == 'xenapi'
+    - inventory_hostname in groups['compute']
+
 - name: Copying over nova.conf
   become: true
   vars:
@@ -205,6 +212,7 @@
     common_options: "{{ docker_common_options }}"
     name: "{{ item.value.container_name }}"
     image: "{{ item.value.image }}"
+    environment: "{{ item.value.environment|default(omit) }}"
     pid_mode: "{{ item.value.pid_mode|default('') }}"
     ipc_mode: "{{ item.value.ipc_mode|default(omit) }}"
     privileged: "{{ item.value.privileged|default(False) }}"
@@ -217,4 +225,3 @@
   with_dict: "{{ nova_services }}"
   notify:
     - "Restart {{ item.key }} container"
-

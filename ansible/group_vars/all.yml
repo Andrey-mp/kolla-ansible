@@ -60,12 +60,9 @@ container_proxy:
   https_proxy: "{{ container_https_proxy }}"
   no_proxy: "{{ container_no_proxy }},{{ api_interface_address }},{{ kolla_internal_vip_address }}"
 
-####################
-# kolla-kubernetes
-####################
 # By default, Kolla API services bind to the network address assigned
 # to the api_interface.  Allow the bind address to be an override.
-api_interface_address:  "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
+api_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + api_interface]['ipv4']['address'] }}"
 
 ################
 # Chrony options
@@ -101,14 +98,14 @@ docker_restart_policy_retry: "10"
 
 # Common options used throughout Docker
 docker_common_options:
-    auth_email: "{{ docker_registry_email }}"
-    auth_password: "{{ docker_registry_password }}"
-    auth_registry: "{{ docker_registry }}"
-    auth_username: "{{ docker_registry_username }}"
-    environment:
-      KOLLA_CONFIG_STRATEGY: "{{ config_strategy }}"
-    restart_policy: "{{ docker_restart_policy }}"
-    restart_retries: "{{ docker_restart_policy_retry }}"
+  auth_email: "{{ docker_registry_email }}"
+  auth_password: "{{ docker_registry_password }}"
+  auth_registry: "{{ docker_registry }}"
+  auth_username: "{{ docker_registry_username }}"
+  environment:
+    KOLLA_CONFIG_STRATEGY: "{{ config_strategy }}"
+  restart_policy: "{{ docker_restart_policy }}"
+  restart_retries: "{{ docker_restart_policy_retry }}"
 
 
 ####################
@@ -133,7 +130,7 @@ om_rpc_password: "{{ rabbitmq_password }}"
 om_rpc_port: "{{ rabbitmq_port }}"
 om_rpc_group: "rabbitmq"
 
-rpc_transport_url: "{{ om_rpc_transport }}://{% for host in groups[om_rpc_group] %}{{ om_rpc_user }}:{{ om_rpc_password }}@{{ hostvars[host]['ansible_' + api_interface]['ipv4']['address'] }}:{{ om_rpc_port }}{% if not loop.last %},{% endif %}{% endfor %}"
+rpc_transport_url: "{{ om_rpc_transport }}://{% for host in groups[om_rpc_group] %}{{ om_rpc_user }}:{{ om_rpc_password }}@{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ om_rpc_port }}{% if not loop.last %},{% endif %}{% endfor %}"
 
 # oslo.messaging notify transport valid options are [ rabbit ]
 om_notify_transport: "rabbit"
@@ -142,7 +139,7 @@ om_notify_password: "{{ rabbitmq_password }}"
 om_notify_port: "{{ rabbitmq_port }}"
 om_notify_group: "rabbitmq"
 
-notify_transport_url: "{{ om_notify_transport }}://{% for host in groups[om_notify_group] %}{{ om_notify_user }}:{{ om_notify_password }}@{{ hostvars[host]['ansible_' + api_interface]['ipv4']['address'] }}:{{ om_notify_port }}{% if not loop.last %},{% endif %}{% endfor %}"
+notify_transport_url: "{{ om_notify_transport }}://{% for host in groups[om_notify_group] %}{{ om_notify_user }}:{{ om_notify_password }}@{{ hostvars[host]['ansible_' + hostvars[host]['api_interface']]['ipv4']['address'] }}:{{ om_notify_port }}{% if not loop.last %},{% endif %}{% endfor %}"
 
 ####################
 # Networking options
@@ -161,11 +158,16 @@ tunnel_interface_address: "{{ hostvars[inventory_hostname]['ansible_' + tunnel_i
 # Valid options are [ openvswitch, linuxbridge, vmware_nsxv, vmware_dvs, opendaylight, opencontrail ]
 neutron_plugin_agent: "openvswitch"
 
+# Valid options are [ internal, infoblox ]
+neutron_ipam_driver: "internal"
+
 # The default ports used by each service.
 # The list should be in alphabetical order
 aodh_api_port: "8042"
 
 barbican_api_port: "9311"
+
+blazar_api_port: "1234"
 
 cinder_api_port: "8776"
 
@@ -210,6 +212,8 @@ ironic_api_port: "6385"
 ironic_inspector_port: "5050"
 
 iscsi_port: "3260"
+
+kafka_port: "9092"
 
 karbor_api_port: "8799"
 
@@ -261,6 +265,11 @@ panko_api_port: "8977"
 
 placement_api_port: "8780"
 
+prometheus_port: "9091"
+prometheus_node_exporter_port: "9100"
+prometheus_mysqld_exporter_port: "9104"
+prometheus_haproxy_exporter_port: "9101"
+
 qdrouterd_port: "31459"
 
 rabbitmq_port: "5672"
@@ -301,6 +310,10 @@ trove_api_port: "8779"
 
 watcher_api_port: "9322"
 
+zookeeper_client_port: "2181"
+zookeeper_peer_port: "2888"
+zookeeper_quorum_port: "3888"
+
 zun_api_port: "9517"
 
 opendaylight_clustering_port: "2550"
@@ -315,6 +328,7 @@ opendaylight_tomcat_redirect_port: "8663"
 opendaylight_karaf_ssh_port: "8101"
 opendaylight_openflow_port: "6653"
 opendaylight_ovsdb_port: "6641"
+opendaylight_websocket_port: "8185"
 
 vitrage_api_port: "8999"
 
@@ -337,7 +351,7 @@ supported_policy_format_list:
 
 # In the context of multi-regions, list here the name of all your regions.
 multiple_regions_names:
-    - "{{ openstack_region_name }}"
+  - "{{ openstack_region_name }}"
 
 openstack_service_workers: "{{ [ansible_processor_vcpus, 5]|min }}"
 openstack_service_rpc_workers: "{{ [ansible_processor_vcpus, 3]|min }}"
@@ -345,17 +359,18 @@ openstack_service_rpc_workers: "{{ [ansible_processor_vcpus, 3]|min }}"
 # Optionally allow Kolla to set sysctl values
 set_sysctl: "yes"
 
-# Valid options are [ novnc, spice ]
+# Valid options are [ none, novnc, spice, rdp ]
 nova_console: "novnc"
 
 # OpenStack authentication string. You should only need to override these if you
 # are changing the admin tenant/project or user.
 openstack_auth:
-    auth_url: "{{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_admin_port }}"
-    username: "admin"
-    password: "{{ keystone_admin_password }}"
-    project_name: "admin"
-    domain_name: "default"
+  auth_url: "{{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_admin_port }}"
+  username: "admin"
+  password: "{{ keystone_admin_password }}"
+  project_name: "admin"
+  domain_name: "default"
+  user_domain_name: "default"
 
 # Endpoint type used to connect with OpenStack services with ansible modules.
 # Valid options are [ public, internal, admin ]
@@ -373,9 +388,16 @@ enable_nova: "yes"
 enable_rabbitmq: "{{ 'yes' if om_rpc_transport == 'rabbit' or om_notify_transport == 'rabbit' else 'no' }}"
 enable_outward_rabbitmq: "{{ enable_murano | bool }}"
 
+# Most memcache clients handle load-balancing via client side
+# hashing (consistent or not) logic, so going under the covers and messing
+# with things that the clients are not aware of is general wrong (but this
+# keeps the default as is...)
+enable_haproxy_memcached: "yes"
+
 # Additional optional OpenStack features and services are specified here
 enable_aodh: "no"
 enable_barbican: "no"
+enable_blazar: "no"
 enable_cadf_notifications: "no"
 enable_ceilometer: "no"
 enable_central_logging: "no"
@@ -402,6 +424,7 @@ enable_gnocchi: "no"
 enable_grafana: "no"
 enable_heat: "yes"
 enable_horizon: "yes"
+enable_horizon_blazar: "{{ enable_blazar | bool }}"
 enable_horizon_cloudkitty: "{{ enable_cloudkitty | bool }}"
 enable_horizon_designate: "{{ enable_designate | bool }}"
 enable_horizon_fwaas: "{{ enable_neutron_fwaas | bool }}"
@@ -414,6 +437,7 @@ enable_horizon_manila: "{{ enable_manila | bool }}"
 enable_horizon_mistral: "{{ enable_mistral | bool }}"
 enable_horizon_murano: "{{ enable_murano | bool }}"
 enable_horizon_neutron_lbaas: "{{ enable_neutron_lbaas | bool }}"
+enable_horizon_octavia: "{{ enable_octavia | bool }}"
 enable_horizon_sahara: "{{ enable_sahara | bool }}"
 enable_horizon_searchlight: "{{ enable_searchlight | bool }}"
 enable_horizon_senlin: "{{ enable_senlin | bool }}"
@@ -429,6 +453,7 @@ enable_ironic: "no"
 enable_ironic_pxe_uefi: "no"
 enable_iscsid: "{{ (enable_cinder | bool and enable_cinder_backend_iscsi | bool) or enable_ironic | bool }}"
 enable_karbor: "no"
+enable_kafka: "no"
 enable_kuryr: "no"
 enable_magnum: "no"
 enable_manila: "no"
@@ -451,6 +476,7 @@ enable_neutron_bgp_dragent: "no"
 enable_neutron_provider_networks: "no"
 enable_neutron_segments: "no"
 enable_neutron_sfc: "no"
+enable_neutron_infoblox_ipam_agent: "no"
 enable_nova_serialconsole_proxy: "no"
 enable_octavia: "no"
 enable_opencontrail: "no"
@@ -472,9 +498,11 @@ enable_tacker: "no"
 enable_telegraf: "no"
 enable_tempest: "no"
 enable_trove: "no"
+enable_trove_singletenant: "no"
 enable_vitrage: "no"
 enable_vmtp: "no"
 enable_watcher: "no"
+enable_zookeeper: "{{ enable_kafka | bool }}"
 enable_zun: "no"
 
 ovs_datapath: "{{ 'netdev' if enable_ovs_dpdk | bool else 'system' }}"
@@ -483,6 +511,7 @@ ironic_keystone_user: "ironic"
 neutron_keystone_user: "neutron"
 nova_keystone_user: "nova"
 placement_keystone_user: "placement"
+murano_keystone_user: "murano"
 
 # Nova fake driver and the number of fake driver per compute node
 enable_nova_fake: "no"
@@ -490,6 +519,7 @@ num_nova_fake_per_node: 5
 
 # Monitoring options are specified here
 enable_collectd: "no"
+enable_prometheus: "no"
 
 # Clean images options are specified here
 enable_destroy_images: "no"
@@ -498,7 +528,7 @@ enable_destroy_images: "no"
 # Logging options
 ####################
 
-elasticsearch_address: "{{ kolla_internal_vip_address }}"
+elasticsearch_address: "{{ kolla_internal_fqdn }}"
 enable_elasticsearch: "{{ 'yes' if enable_central_logging | bool or enable_freezer | bool or enable_osprofiler | bool or enable_skydive | bool else 'no' }}"
 enable_kibana: "{{ 'yes' if enable_central_logging | bool else 'no' }}"
 
@@ -545,8 +575,8 @@ default_project_domain_id: "default"
 default_user_domain_name: "Default"
 default_user_domain_id: "default"
 
-# Valid options are [ uuid, fernet ]
-keystone_token_provider: "uuid"
+# Valid options are [ fernet ]
+keystone_token_provider: "fernet"
 fernet_token_expiry: 86400
 
 keystone_default_user_role: "_member_"
@@ -583,6 +613,9 @@ panko_database_type: "mysql"
 # Valid options are [file, ceph]
 gnocchi_backend_storage: "{{ 'ceph' if enable_ceph|bool else 'file' }}"
 
+# Valid options are [redis, '']
+gnocchi_incoming_storage: "{{ 'redis' if enable_redis | bool else '' }}"
+
 
 #################################
 # Cinder options
@@ -599,8 +632,8 @@ cinder_backup_mount_options_nfs: ""
 #######################
 # Cloudkitty options
 #######################
-# Valid options are [ ceilometer, gnocchi ]
-cloudkitty_collector_backend: "ceilometer"
+# Valid option is gnocchi
+cloudkitty_collector_backend: "gnocchi"
 
 #######################
 # Designate options
@@ -622,7 +655,12 @@ neutron_type_drivers: "flat,vlan,vxlan"
 # NOTE: for ironic this list should also contain 'flat'
 neutron_tenant_network_types: "vxlan"
 
-computes_need_external_bridge: "{{ enable_neutron_dvr | bool or enable_neutron_provider_networks | bool or enable_opendaylight | bool and neutron_plugin_agent != 'vmware_dvs' }}"
+# valid values: ["dvr", "dvr_no_external"]
+neutron_compute_dvr_mode: "dvr"
+computes_need_external_bridge: "{{ enable_neutron_dvr | bool and (neutron_compute_dvr_mode == 'dvr' or inventory_hostname in groups['external-compute']) or enable_neutron_provider_networks | bool or enable_opendaylight | bool and neutron_plugin_agent != 'vmware_dvs' }}"
+
+# Default DNS resolvers for virtual networks
+neutron_dnsmasq_dns_servers: "1.1.1.1,8.8.8.8,8.8.4.4"
 
 #######################
 # Nova options
@@ -700,8 +738,11 @@ ceph_rule: "default host {{ 'indep' if ceph_pool_type == 'erasure' else 'firstn'
 ceph_cache_rule: "cache host firstn"
 
 # Set the pgs and pgps for pool
-ceph_pool_pg_num: 128
-ceph_pool_pgp_num: 128
+# WARNING! These values are dependant on the size and shape of your cluster -
+# the default values are not suitable for production use. Please refer to the
+# Kolla Ceph documentation for more information.
+ceph_pool_pg_num: 8
+ceph_pool_pgp_num: 8
 
 #####################
 # VMware support
@@ -753,7 +794,8 @@ xenserver_himn_ip: "169.254.0.1"
 xenserver_username: "root"
 xenserver_connect_protocol: "https"
 # File used to save XenAPI's facts variables formatted as json.
-xenapi_facts_file: "/etc/kolla/xenapi.json"
+xenapi_facts_root: "/etc/kolla/xenapi/"
+xenapi_facts_file: "facts.json"
 
 #############################################
 # MariaDB component-specific database details
@@ -766,3 +808,10 @@ use_preconfigured_databases: "no"
 # whether to use a common, preconfigured user
 # for all component databases
 use_common_mariadb_user: "no"
+
+############
+# Prometheus
+############
+enable_prometheus_haproxy_exporter: "{{ enable_haproxy | bool }}"
+enable_prometheus_mysqld_exporter: "{{ enable_mariadb | bool }}"
+enable_prometheus_node_exporter: "yes"

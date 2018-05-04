@@ -25,7 +25,9 @@
 
 - name: Reload docker service file
   become: True
-  command: systemctl daemon-reload
+  systemd:
+    name: docker
+    daemon_reload: yes
 
 - name: Get stat of libvirtd apparmor profile
   stat:
@@ -47,7 +49,7 @@
 
 - name: Add kolla user to docker group
   user:
-    name: kolla
+    name: "{{ kolla_user }}"
     append: yes
     groups: docker
   become: True
@@ -91,7 +93,7 @@
     - enable_host_ntp | bool
 
 - name: Synchronizing time one-time
-  command:  ntpd -gq
+  command: ntpd -gq
   become: True
   when: enable_host_ntp | bool
 
@@ -115,13 +117,13 @@
     - ansible_os_family == "RedHat"
     - enable_host_ntp | bool
 
-- name: Disable selinux
+- name: Change state of selinux
   selinux:
-    policy: target
-    state: permissive
+    policy: targeted
+    state: "{{ selinux_state }}"
   become: true
   when:
-    - disable_selinux | bool
+    - change_selinux | bool
     - ansible_os_family == "RedHat"
 
 - name: Reboot

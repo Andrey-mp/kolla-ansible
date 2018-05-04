@@ -45,6 +45,7 @@ Kolla-Ansible deploys containers for the following OpenStack projects:
 - `Aodh <https://docs.openstack.org/aodh/latest/>`__
 - `Barbican <https://docs.openstack.org/barbican/latest/>`__
 - `Bifrost <https://docs.openstack.org/bifrost/latest/>`__
+- `Blazar <https://docs.openstack.org/blazar/latest/>`__
 - `Ceilometer <https://docs.openstack.org/ceilometer/latest/>`__
 - `Cinder <https://docs.openstack.org/cinder/latest/>`__
 - `CloudKitty <https://docs.openstack.org/cloudkitty/latest/>`__
@@ -88,7 +89,8 @@ Kolla-Ansible deploys containers for the following infrastructure components:
 - `Ceph <http://ceph.com/>`__ implementation for Cinder, Glance and Nova.
 - `Collectd <https://collectd.org/>`__,
   `Telegraf <https://docs.influxdata.com/telegraf/>`__,
-  `InfluxDB <https://influxdata.com/time-series-platform/influxdb/>`__, and
+  `InfluxDB <https://influxdata.com/time-series-platform/influxdb/>`__,
+  `Prometheus <https://prometheus.io/>`__, and
   `Grafana <http://grafana.org/>`__ for performance monitoring.
 - `Elasticsearch <https://www.elastic.co/de/products/elasticsearch/>`__ and
   `Kibana <https://www.elastic.co/de/products/kibana/>`__ to search, analyze,

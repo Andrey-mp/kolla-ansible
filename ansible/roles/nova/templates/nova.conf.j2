@@ -35,6 +35,9 @@ compute_driver = fake.FakeDriver
 compute_driver = vmwareapi.VMwareVCDriver
 {% elif nova_compute_virt_type == 'xenapi' %}
 compute_driver = xenapi.XenAPIDriver
+{% if service_name == 'nova-compute' %}
+host = xenapi_facts['dom0_hostname']
+{% endif %}
 {% else %}
 compute_driver = libvirt.LibvirtDriver
 {% endif %}
@@ -51,6 +54,13 @@ compute_monitors=nova.compute.monitors.cpu.virt_driver
 {% endif %}
 
 transport_url = {{ rpc_transport_url }}
+
+{% if enable_blazar | bool %}
+[filter_scheduler]
+available_filters = nova.scheduler.filters.all_filters
+available_filters = blazarnova.scheduler.filters.blazar_filter.BlazarFilter
+enabled_filters = RetryFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter,BlazarFilter
+{% endif %}
 
 [api]
 use_forwarded_for = true
@@ -110,6 +120,9 @@ user_domain_name = {{ default_user_domain_name }}
 project_domain_name = {{ default_project_domain_name }}
 api_endpoint = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ ironic_api_port }}/v1
 {% endif %}
+
+[oslo_middleware]
+enable_proxy_headers_parsing = True
 
 [oslo_concurrency]
 lock_path = /var/lib/nova/tmp
@@ -255,11 +268,11 @@ password = {{ placement_keystone_password }}
 user_domain_name = {{ default_user_domain_name }}
 project_name = service
 project_domain_name = {{ default_project_domain_name }}
-os_region_name = {{ openstack_region_name }}
+region_name = {{ openstack_region_name }}
 os_interface = internal
 
 [notifications]
-{% if enable_ceilometer | bool or enable_searchlight | bool or enable_designate | bool %}
+{% if enable_ceilometer | bool or enable_searchlight | bool or enable_designate | bool or enable_neutron_infoblox_ipam_agent | bool %}
 notify_on_state_change = vm_and_task_state
 {% endif %}
 

@@ -8,6 +8,7 @@ horizon_services:
     enabled: true
     image: "{{ horizon_image_full }}"
     environment:
+      ENABLE_BLAZAR: "{{ 'yes' if enable_horizon_blazar | bool else 'no' }}"
       ENABLE_CLOUDKITTY: "{{ 'yes' if enable_horizon_cloudkitty | bool else 'no' }}"
       ENABLE_DESIGNATE: "{{ 'yes' if enable_horizon_designate | bool else 'no' }}"
       ENABLE_FWAAS: "{{ 'yes' if enable_horizon_fwaas | bool else 'no' }}"
@@ -20,6 +21,7 @@ horizon_services:
       ENABLE_MISTRAL: "{{ 'yes' if enable_horizon_mistral | bool else 'no' }}"
       ENABLE_MURANO: "{{ 'yes' if  enable_horizon_murano | bool else 'no' }}"
       ENABLE_NEUTRON_LBAAS: "{{ 'yes' if enable_horizon_neutron_lbaas | bool else 'no' }}"
+      ENABLE_OCTAVIA: "{{ 'yes' if enable_horizon_octavia | bool else 'no' }}"
       ENABLE_SAHARA: "{{ 'yes' if enable_horizon_sahara | bool else 'no' }}"
       ENABLE_SEARCHLIGHT: "{{ 'yes' if enable_horizon_searchlight | bool else 'no' }}"
       ENABLE_SENLIN: "{{ 'yes' if enable_horizon_senlin | bool else 'no' }}"
@@ -60,6 +62,7 @@ horizon_image_full: "{{ horizon_image }}:{{ horizon_tag }}"
 # OpenStack
 ####################
 horizon_logging_debug: "{{ openstack_logging_debug }}"
+horizon_keystone_url: "{{ keystone_internal_url }}"
 
 
 ####################

@@ -75,6 +75,15 @@
         tags: collectd,
         when: enable_collectd | bool }
 
+- name: Apply role zookeeper
+  gather_facts: false
+  hosts: zookeeper
+  serial: '{{ serial|default("0") }}'
+  roles:
+    - { role: zookeeper,
+        tags: zookeeper,
+        when: enable_zookeeper | bool }
+
 - name: Apply role elasticsearch
   gather_facts: false
   hosts: elasticsearch
@@ -147,6 +156,19 @@
     - { role: mariadb,
         tags: mariadb,
         when: enable_mariadb | bool }
+
+- name: Apply role prometheus
+  gather_facts: false
+  hosts:
+    - prometheus
+    - prometheus-node-exporter
+    - prometheus-mysqld-exporter
+    - prometheus-haproxy-exporter
+  serial: '{{ serial|default("0") }}'
+  roles:
+    - { role: prometheus,
+        tags: prometheus,
+        when: enable_prometheus | bool }
 
 - name: Apply role iscsi
   gather_facts: false
@@ -249,15 +271,26 @@
 - name: Apply role ceph
   gather_facts: false
   hosts:
+    - ceph-mds
+    - ceph-mgr
     - ceph-mon
+    - ceph-nfs
     - ceph-osd
     - ceph-rgw
-    - ceph-mgr
   serial: '{{ serial|default("0") }}'
   roles:
     - { role: ceph,
         tags: ceph,
         when: enable_ceph | bool }
+
+- name: Apply role kafka
+  gather_facts: false
+  hosts: kafka
+  serial: '{{ serial|default("0") }}'
+  roles:
+    - { role: kafka,
+        tags: kafka,
+        when: enable_kafka | bool }
 
 - name: Apply role karbor
   gather_facts: false
@@ -339,22 +372,27 @@
 - name: Apply role opendaylight
   gather_facts: false
   hosts: opendaylight
+  serial: '{{ serial|default("0") }}'
   roles:
     - { role: opendaylight,
         tags: opendaylight,
         when: enable_opendaylight | bool }
 
 - name: Apply role openvswitch
+  gather_facts: false
   hosts:
     - openvswitch
+  serial: '{{ serial|default("0") }}'
   roles:
     - { role: openvswitch,
         tags: openvswitch,
         when: "(enable_openvswitch | bool) and not (enable_ovs_dpdk | bool)"}
 
 - name: Apply role ovs-dpdk
+  gather_facts: false
   hosts:
     - openvswitch
+  serial: '{{ serial|default("0") }}'
   roles:
     - { role: ovs-dpdk,
         tags: ovs-dpdk,
@@ -380,7 +418,6 @@
     - neutron-l3-agent
     - neutron-lbaas-agent
     - neutron-metadata-agent
-    - neutron-vpnaas-agent
     - compute
     - manila-share
   serial: '{{ serial|default("0") }}'
@@ -393,6 +430,7 @@
   gather_facts: false
   hosts:
     - compute
+  serial: '{{ serial|default("0") }}'
   roles:
     - { role: kuryr,
         tags: kuryr,
@@ -500,6 +538,7 @@
 - name: Apply role manila
   gather_facts: false
   hosts:
+    - ceph-mon
     - manila-api
     - manila-data
     - manila-share
@@ -751,3 +790,14 @@
     - { role: vitrage,
         tags: vitrage,
         when: enable_vitrage | bool }
+
+- name: Apply role blazar
+  gather_facts: false
+  hosts:
+    - blazar-api
+    - blazar-manager
+  serial: '{{ serial|default("0") }}'
+  roles:
+    - { role: blazar,
+        tags: blazar,
+        when: enable_blazar | bool }

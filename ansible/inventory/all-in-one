@@ -7,11 +7,15 @@ localhost       ansible_connection=local
 localhost       ansible_connection=local
 
 # inner-compute is the groups of compute nodes which do not have
-# external reachability
+# external reachability.
+# DEPRECATED, the group will be removed in S release of OpenStack,
+# use variable neutron_compute_dvr_mode instead.
 [inner-compute]
 
 # external-compute is the groups of compute nodes which can reach
-# outside
+# outside.
+# DEPRECATED, the group will be removed in S release of OpenStack,
+# use variable neutron_compute_dvr_mode instead.
 [external-compute]
 localhost       ansible_connection=local
 
@@ -51,6 +55,9 @@ monitoring
 [etcd:children]
 control
 compute
+
+[kafka:children]
+control
 
 [karbor:children]
 control
@@ -156,6 +163,9 @@ control
 [influxdb:children]
 monitoring
 
+[prometheus:children]
+monitoring
+
 [magnum:children]
 control
 
@@ -226,6 +236,9 @@ control
 [bifrost:children]
 deployment
 
+[zookeeper:children]
+control
+
 [zun:children]
 control
 
@@ -233,6 +246,9 @@ control
 monitoring
 
 [redis:children]
+control
+
+[blazar:children]
 control
 
 # Additional control implemented here. These groups allow you to control which
@@ -290,10 +306,10 @@ neutron
 [neutron-metadata-agent:children]
 neutron
 
-[neutron-vpnaas-agent:children]
+[neutron-bgp-dragent:children]
 neutron
 
-[neutron-bgp-dragent:children]
+[neutron-infoblox-ipam-agent:children]
 neutron
 
 # OpenContrail
@@ -356,6 +372,9 @@ cloudkitty
 
 # Freezer
 [freezer-api:children]
+freezer
+
+[freezer-scheduler:children]
 freezer
 
 # iSCSI
@@ -641,3 +660,24 @@ vitrage
 
 [vitrage-ml:children]
 vitrage
+
+# Blazar
+[blazar-api:children]
+blazar
+
+[blazar-manager:children]
+blazar
+
+# Prometheus
+[prometheus-node-exporter:children]
+monitoring
+control
+compute
+network
+storage
+
+[prometheus-mysqld-exporter:children]
+mariadb
+
+[prometheus-haproxy-exporter:children]
+haproxy

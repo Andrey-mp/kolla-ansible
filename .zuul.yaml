@@ -1,3 +1,4 @@
+---
 - project:
     check:
       jobs:
@@ -8,6 +9,10 @@
         - kolla-ansible-centos-source-ceph
         - kolla-ansible-oraclelinux-source-ceph
 
+        - openstack-tox-lower-constraints
+    gate:
+      jobs:
+        - openstack-tox-lower-constraints
 - nodeset:
     name: kolla-ansible-centos
     nodes:
@@ -71,6 +76,8 @@
       - ^doc/.*
     vars:
       scenario: aio
+    roles:
+      - zuul: openstack-infra/zuul-jobs
 
 - job:
     name: kolla-ansible-centos-source

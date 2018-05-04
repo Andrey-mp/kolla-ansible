@@ -15,6 +15,7 @@ listen = {{ api_interface_address }}:{{ designate_api_port }}
 api_base_uri = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ designate_api_port }}
 enabled_extensions_v2 = 'quotas, reports'
 workers = {{ openstack_service_workers }}
+enable_host_header = True
 
 [keystone_authtoken]
 auth_uri = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_public_port }}
@@ -93,10 +94,6 @@ zone_id =
 notification_topics = notifications_designate
 control_exchange = neutron
 formatv4 = '%(octet0)s-%(octet1)s-%(octet2)s-%(octet3)s.%(zone)s'
-formatv4 = '%(hostname)s.%(project)s.%(zone)s'
-formatv4 = '%(hostname)s.%(zone)s'
-formatv6 = '%(hostname)s.%(zone)s'
-formatv6 = '%(hostname)s.%(project)s.%(zone)s'
 
 [oslo_messaging_notifications]
 transport_url = {{ notify_transport_url }}
@@ -105,6 +102,9 @@ driver = messagingv2
 
 [oslo_concurrency]
 lock_path = /var/lib/designate/tmp
+
+[oslo_middleware]
+enable_proxy_headers_parsing = True
 
 {% if designate_policy_file is defined %}
 [oslo_policy]

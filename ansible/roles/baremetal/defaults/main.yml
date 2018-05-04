@@ -10,11 +10,18 @@ customize_etc_hosts: True
 
 create_kolla_user: True
 
+kolla_user: "kolla"
+kolla_group: "kolla"
+
 enable_host_ntp: True
 
-disable_selinux: True
+change_selinux: True
+
+selinux_state: "permissive"
 
 docker_storage_driver: ""
+
+docker_runtime_directory: ""
 
 debian_pkg_install:
  - "{{ 'docker-ce' if ansible_architecture == 'aarch64' else 'docker-engine=1.12.*' }}"
@@ -39,3 +46,12 @@ redhat_pkg_removals:
  - libvirt
  - libvirt-daemon
  - iscsi-initiator-utils
+
+# Path to a virtualenv in which to install python packages. If None, a
+# virtualenv will not be used.
+virtualenv:
+
+# Whether the virtualenv will inherit packages from the global site-packages
+# directory. This is typically required for modules such as yum and apt which
+# are not available on PyPI.
+virtualenv_site_packages: True

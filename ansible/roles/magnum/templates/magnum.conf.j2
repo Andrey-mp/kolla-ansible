@@ -14,9 +14,6 @@ host = {{ api_interface_address }}
 workers = {{ openstack_service_workers }}
 {% endif %}
 
-[oslo_policy]
-policy_file = /etc/magnum/policy.json
-
 [database]
 connection = mysql+pymysql://{{ magnum_database_user }}:{{ magnum_database_password }}@{{ magnum_database_address }}/{{ magnum_database_name }}
 max_retries = -1
@@ -77,6 +74,9 @@ cluster_user_trust = {{ enable_cluster_user_trust }}
 [oslo_concurrency]
 lock_path = /var/lib/magnum/tmp
 
+[oslo_middleware]
+enable_proxy_headers_parsing = True
+
 [certificates]
 {% if enable_barbican | bool %}
 cert_manager_type = barbican
@@ -88,7 +88,7 @@ cert_manager_type = x509keypair
 transport_url = {{ notify_transport_url }}
 {% if enable_ceilometer | bool %}
 driver = messaging
-topics = 'notifications'
+topics = notifications
 {% else %}
 driver = noop
 {% endif %}

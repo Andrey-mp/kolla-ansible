@@ -4,7 +4,7 @@
     "command": "{{ apache_cmd }} -DFOREGROUND",
     "config_files": [
         {
-            "source": "{{ container_config_directory }}/freezer-api.conf",
+            "source": "{{ container_config_directory }}/freezer.conf",
             "dest": "/etc/freezer/freezer.conf",
             "owner": "freezer",
             "perm": "0600"

@@ -86,6 +86,8 @@
       - "{{ node_custom_config }}/glance/glance-swift.conf"
       - "{{ node_custom_config }}/glance/{{ inventory_hostname }}/glance-swift.conf"
     dest: "{{ node_config_directory }}/glance-api/glance-swift.conf"
+    mode: "0660"
+  become: true
   register: glance_swift_conf
   when:
     - glance_api.enabled | bool
@@ -97,7 +99,7 @@
 - name: Copying over existing policy file
   template:
     src: "{{ glance_policy_file_path }}"
-    dest: "{{ node_config_directory }}/{{ item.key }}/{{ glance_policy_file_path }}"
+    dest: "{{ node_config_directory }}/{{ item.key }}/{{ glance_policy_file }}"
     mode: "0660"
   become: true
   register: glance_policy_overwriting
@@ -115,7 +117,7 @@
     common_options: "{{ docker_common_options }}"
     name: "{{ item.value.container_name }}"
     image: "{{ item.value.image }}"
-    volumes: "{{ item.value.volumes }}"
+    volumes: "{{ item.value.volumes|reject('equalto', '')|list }}"
   register: check_glance_containers
   when:
     - action != "config"
@@ -125,4 +127,3 @@
   notify:
     - Restart glance-api container
     - Restart glance-registry container
-
